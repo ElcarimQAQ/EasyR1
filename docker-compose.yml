@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  verl:
+    command: bash
+    
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: verl:v0.1
+    environment:
+      - MAX_JOBS=32
+      - VLLM_WORKER_MULTIPROC_METHOD=spawn
+      - DEBIAN_FRONTEND=noninteractive
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=graphics,utility,compute
+    volumes:
+      - ../EasyR1:/workspace
+      - /data/:/data/
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    ipc: host
+    ulimits:
+      stack: 67108864
+    stdin_open: true
+    tty: true
