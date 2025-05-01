@@ -1,0 +1,109 @@
++ export PYTHONPATH=/workspace/verl
++ PYTHONPATH=/workspace/verl
++ export NCCL_DEBUG=WARN
++ NCCL_DEBUG=WARN
++ export MASTER_ADDR=172.18.0.2
++ MASTER_ADDR=172.18.0.2
++ export MASTER_PORT=63799
++ MASTER_PORT=63799
++ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
++ PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
++ export TOKENIZERS_PARALLELISM=false
++ TOKENIZERS_PARALLELISM=false
++ export WANDB_API_KEY=e2e0261992fab6ce73072eaac4424f5a7e29a8f1
++ WANDB_API_KEY=e2e0261992fab6ce73072eaac4424f5a7e29a8f1
++ MODEL_PATH=/workspace/models/openvla-7b
++ export CUDA_VISIBLE_DEVICES=1,2
++ CUDA_VISIBLE_DEVICES=1,2
++ SYSTEM_PROMPT='Act as a robot to perform the given task.'
++ python3 -m verl.trainer.main config=examples/grpo_example_vla.yaml 'data.system_prompt=Act as a robot to perform the given task.' worker.actor.model.model_path=/workspace/models/openvla-7b worker.rollout.enable_chunked_prefill=false trainer.experiment_name=openvla_7b_robot trainer.n_gpus_per_node=2
+2025-05-01 15:56:46.377619: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-05-01 15:56:46.409455: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-05-01 15:56:46.409491: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2025-05-01 15:56:46.410817: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-05-01 15:56:46.415997: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-05-01 15:56:50.549651: W tensorflow/core/common_runtime/gpu/gpu_device.cc:2348] TensorFlow was not built with CUDA kernel binaries compatible with compute capability 9.0. CUDA kernels will be jit-compiled from PTX, which could take 30 minutes or longer.
+2025-05-01 15:56:50.552540: W tensorflow/core/common_runtime/gpu/gpu_device.cc:2348] TensorFlow was not built with CUDA kernel binaries compatible with compute capability 9.0. CUDA kernels will be jit-compiled from PTX, which could take 30 minutes or longer.
+2025-05-01 15:57:05,619	INFO worker.py:1636 -- Connecting to existing Ray cluster at address: 172.18.0.2:6379...
+[2025-05-01 15:57:10,629 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 15:57:40,633 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 15:57:46,639 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 15:58:16,642 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 15:58:22,647 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 15:58:52,650 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 15:58:58,655 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 15:59:28,658 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 15:59:34,664 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:00:04,667 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:00:10,672 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:00:40,675 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:00:46,682 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:01:16,685 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:01:22,691 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:01:52,695 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:01:58,702 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:02:28,706 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:02:34,711 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:03:04,715 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:03:10,721 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:03:40,724 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:03:46,729 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:04:16,733 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:04:22,738 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:04:52,741 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:04:58,746 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:05:28,749 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:05:34,754 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:06:04,757 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:06:10,764 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:06:40,767 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:06:46,771 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:07:16,774 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:07:22,780 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:07:52,783 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:07:58,790 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:08:28,794 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+[2025-05-01 16:08:34,800 E 14062 14062] gcs_rpc_client.h:179: Failed to connect to GCS at address 172.18.0.2:6379 within 5 seconds.
+[2025-05-01 16:09:04,803 W 14062 14062] gcs_client.cc:178: Failed to get cluster ID from GCS server: TimedOut: Timed out while waiting for GCS to become available.
+2025-05-01 16:09:05,807	INFO worker.py:1786 -- Failed to connect to the default Ray cluster address at 172.18.0.2:6379. This is most likely due to a previous Ray instance that has since crashed. To reset the default address to connect to, run `ray stop` or restart Ray with `ray start`.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/worker.py", line 1777, in init
+    _global_node = ray._private.node.Node(
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/node.py", line 159, in __init__
+    self._init_gcs_client()
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/node.py", line 770, in _init_gcs_client
+    raise RuntimeError(
+RuntimeError: Failed to connect to GCS. Last connection error: Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/node.py", line 733, in _init_gcs_client
+    client = GcsClient(
+  File "python/ray/_raylet.pyx", line 2722, in ray._raylet.GcsClient.__cinit__
+  File "python/ray/includes/gcs_client.pxi", line 64, in ray._raylet.NewGcsClient.standalone
+  File "python/ray/includes/common.pxi", line 114, in ray._raylet.check_status_timeout_as_rpc_error
+ray.exceptions.RpcError: Timed out while waiting for GCS to become available.
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/verl/trainer/main.py", line 160, in <module>
+    main()    
+  File "/workspace/verl/trainer/main.py", line 140, in main
+    ray.init(
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/worker.py", line 1793, in init
+    raise ConnectionError
+ConnectionError
+Using LIBERO constants:
+  NUM_ACTIONS_CHUNK = 5
+  ACTION_DIM = 7
+  PROPRIO_DIM = 7
+  ACTION_PROPRIO_NORMALIZATION_TYPE = bounds_q99
+If needed, manually set the correct constants in `prismatic/vla/constants.py`!
+Environment variables: environ({'NPP_VERSION': '12.2.1.4', 'SHELL': '/bin/bash', 'NVIDIA_VISIBLE_DEVICES': 'all', 'COLORTERM': 'truecolor', 'DALI_BUILD': '9783408', 'CUSOLVER_VERSION': '11.5.2.141', 'NVM_INC': '/usr/local/nvm/versions/node/v16.20.2/include/node', 'TERM_PROGRAM_VERSION': '1.99.3', 'CUBLAS_VERSION': '12.2.5.6', 'HOSTNAME': '1c74aacb176b', 'NODE_OPTIONS': '', 'MASTER_PORT': '63799', 'CUFFT_VERSION': '11.0.8.103', 'NVIDIA_REQUIRE_CUDA': 'cuda>=9.0', 'CUDA_CACHE_DISABLE': '1', 'TENSORBOARD_PORT': '6006', 'REMOTE_CONTAINERS_IPC': '/tmp/vscode-remote-containers-ipc-ce84809c-2da7-4082-b87f-b0aea56c9532.sock', 'TORCH_CUDA_ARCH_LIST': '5.2 6.0 6.1 7.0 7.2 7.5 8.0 8.6 8.7 9.0+PTX', 'NCCL_VERSION': '2.19.3', 'OPENBLAS_VERSION': '0.3.23', 'CUSPARSE_VERSION': '12.1.2.141', 'ENV': '/etc/shinit_v2', 'PWD': '/workspace', 'OPENUCX_VERSION': '1.15.0', 'NSIGHT_SYSTEMS_VERSION': '2023.3.1.92', 'NVIDIA_DRIVER_CAPABILITIES': 'graphics,utility,compute', 'POLYGRAPHY_VERSION': '0.49.0', 'NCCL_DEBUG': 'WARN', 'UCC_CL_BASIC_TLS': '^sharp', 'VLLM_WORKER_MULTIPROC_METHOD': 'spawn', 'TRT_VERSION': '8.6.1.6+cuda12.0.1.011', 'VSCODE_GIT_ASKPASS_NODE': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/node', 'NVIDIA_PRODUCT_NAME': 'PyTorch', 'RDMACORE_VERSION': '39.0', 'TOKENIZERS_PARALLELISM': 'false', 'HOME': '/root', 'LANG': 'en_US.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'REMOTE_CONTAINERS': 'true', 'COCOAPI_VERSION': '2.0+nv0.7.3', 'CUDA_VERSION': '12.2.2.009', 'PYTORCH_VERSION': '2.1.0a0+32f93b1', 'CURAND_VERSION': '10.3.3.141', 'GIT_ASKPASS': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/extensions/git/dist/askpass.sh', 'PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION': 'python', 'PYTORCH_BUILD_NUMBER': '0', 'USE_EXPERIMENTAL_CUDNN_V8_API': '1', 'CUTENSOR_VERSION': '1.7.0.1', 'PIP_DEFAULT_TIMEOUT': '100', 'PYTORCH_CUDA_ALLOC_CONF': 'expandable_segments:True', 'HPCX_VERSION': '2.16rc4', 'TORCH_CUDNN_V8_API_ENABLED': '1', 'NVM_DIR': '/usr/local/nvm', 'MASTER_ADDR': '172.18.0.2', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'CUDA_VISIBLE_DEVICES': '1,2', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PYTHONPATH': '/workspace/verl', 'SETUPTOOLS_USE_DISTUTILS': 'stdlib', 'TERM': 'xterm-256color', 'GDRCOPY_VERSION': '2.3', 'REMOTE_CONTAINERS_SOCKETS': '["/root/.gnupg/S.gpg-agent"]', 'LESSOPEN': '| /usr/bin/lesspipe %s', 'OPENMPI_VERSION': '4.1.5rc2', 'NVJPEG_VERSION': '12.2.2.4', 'LIBRARY_PATH': '/usr/local/cuda/lib64/stubs:', 'WANDB_API_KEY': 'e2e0261992fab6ce73072eaac4424f5a7e29a8f1', 'VSCODE_GIT_IPC_HANDLE': '/tmp/vscode-git-9f406a4b86.sock', 'PYTHONIOENCODING': 'utf-8', 'SHLVL': '4', 'MAX_JOBS': '32', 'NVM_CD_FLAGS': '', 'BASH_ENV': '/etc/bash.bashrc', 'CUDNN_VERSION': '8.9.5.29', 'NSIGHT_COMPUTE_VERSION': '2023.2.2.3', 'DALI_VERSION': '1.30.0', 'JUPYTER_PORT': '8888', 'PYTORCH_HOME': '/opt/pytorch/pytorch', 'LD_LIBRARY_PATH': '/usr/local/lib/python3.10/dist-packages/cv2/../../lib64:/usr/local/lib/python3.10/dist-packages/torch/lib:/usr/local/lib/python3.10/dist-packages/torch_tensorrt/lib:/usr/local/cuda/compat/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64', 'NVIDIA_BUILD_ID': '71422337', 'OMPI_MCA_coll_hcoll_enable': '0', 'OPAL_PREFIX': '/opt/hpcx/ompi', 'CUDA_DRIVER_VERSION': '535.104.05', 'LC_ALL': 'C.UTF-8', 'TRANSFORMER_ENGINE_VERSION': '0.12', 'PYTORCH_BUILD_VERSION': '2.1.0a0+32f93b1', '_CUDA_COMPAT_PATH': '/usr/local/cuda/compat', 'VSCODE_GIT_ASKPASS_MAIN': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/extensions/git/dist/askpass-main.js', 'CUDA_HOME': '/usr/local/cuda', 'CUDA_MODULE_LOADING': 'LAZY', 'NVIDIA_REQUIRE_JETPACK_HOST_MOUNTS': '', 'BROWSER': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/bin/helpers/browser.sh', 'PATH': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/bin/remote-cli:/usr/local/nvm/versions/node/v16.20.2/bin:/usr/local/lib/python3.10/dist-packages/torch_tensorrt/bin:/usr/local/mpi/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/ucx/bin:/opt/tensorrt/bin', 'MOFED_VERSION': '5.4-rdmacore39.0', 'NVM_BIN': '/usr/local/nvm/versions/node/v16.20.2/bin', 'NVIDIA_PYTORCH_VERSION': '23.10', 'TRTOSS_VERSION': '23.10', 'DEBIAN_FRONTEND': 'noninteractive', 'TORCH_ALLOW_TF32_CUBLAS_OVERRIDE': '1', 'TERM_PROGRAM': 'vscode', 'VSCODE_IPC_HOOK_CLI': '/tmp/vscode-ipc-523ffe21-dc8d-4f97-a38b-bfa02661411d.sock', '_': '/usr/bin/python3', 'RAY_CLIENT_MODE': '0', 'LAZY_LEGACY_OP': 'False', 'TF2_BEHAVIOR': '1', 'TPU_ML_PLATFORM': 'Tensorflow', 'KMP_DUPLICATE_LIB_OK': 'True', 'KMP_INIT_AT_FORK': 'FALSE', 'NCCL_CUMEM_ENABLE': '0', 'TORCHINDUCTOR_COMPILE_THREADS': '1'})
+Starting Ray initialization...

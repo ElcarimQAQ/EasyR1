@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: verl:v0
+    image: verl:v0.3
     environment:
       - MAX_JOBS=32
       - VLLM_WORKER_MULTIPROC_METHOD=spawn

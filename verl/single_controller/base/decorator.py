@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING, List
 
 import ray
 
-from ...protocol import DataProto, DataProtoFuture
+from verl.protocol import DataProto, DataProtoFuture
 
 
 if TYPE_CHECKING:

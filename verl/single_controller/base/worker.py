@@ -99,6 +99,7 @@ class Worker(WorkerHelper):
         return instance
 
     def _configure_before_init(self, register_center_name: str, rank: int):
+        print(f"Entered _configure_before_init with rank: {rank}, register_center_name: {register_center_name}")
         assert isinstance(rank, int), f"rank must be int, instead of {type(rank)}"
 
         if rank == 0:

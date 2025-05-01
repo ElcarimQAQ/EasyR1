@@ -31,8 +31,8 @@ from tensordict import TensorDict
 from torch.distributed import ProcessGroup
 from torch.utils.data import DataLoader
 
-from .utils.py_functional import union_two_dict
-from .utils.torch_functional import allgather_dict_tensors
+from verl.utils.py_functional import union_two_dict
+from verl.utils.torch_functional import allgather_dict_tensors
 
 
 try:

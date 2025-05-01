@@ -35,6 +35,8 @@ def recursive_post_init(dataclass_obj):
 class DataConfig:
     train_files: str = ""
     val_files: str = ""
+    data_root_dir: str = ""
+    data_mix: str = "bridge_dataset"  # 添加默认值
     prompt_key: str = "prompt"
     answer_key: str = "answer"
     image_key: str = "images"
@@ -46,6 +48,11 @@ class DataConfig:
     seed: int = 1
     max_pixels: int = 4194304
     min_pixels: int = 262144
+
+    # # 添加 OpenVLA RLDSDataset 所需的字段
+    # data_root_dir: str = ""
+    # dataset_name: str = ""
+    # data_val_name: str = ""
 
 
 @dataclass

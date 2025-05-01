@@ -80,7 +80,7 @@ class RayResourcePool(ResourcePool):
     ) -> None:
         super().__init__(process_on_nodes, max_colocate_count)
         self.use_gpu = use_gpu
-        # print(f"in RayProcessDispatchConfiguration: name_prefix = {name_prefix}")
+        print(f"in RayProcessDispatchConfiguration: name_prefix = {name_prefix}")
         self.name_prefix = name_prefix
         self.pgs = None
         self.detached = detached
@@ -92,7 +92,7 @@ class RayResourcePool(ResourcePool):
         pg_name_prefix = (
             name if name else f"{self.name_prefix}verl_group_{'_'.join([str(count) for count in self._store])}:"
         )
-        # print(f"pg_name_prefix = {pg_name_prefix}")
+        print(f"pg_name_prefix = {pg_name_prefix}")
         pg_scheme = [
             [
                 {"CPU": self.max_collocate_count, "GPU": 1} if self.use_gpu else {"CPU": self.max_collocate_count}
@@ -209,6 +209,7 @@ class RayWorkerGroup(WorkerGroup):
         name_prefix: str = None,
         detached=False,
         worker_names=None,
+        # namespace="ppo_training",
         **kwargs,
     ) -> None:
         super().__init__(resource_pool=resource_pool, **kwargs)
@@ -256,7 +257,7 @@ class RayWorkerGroup(WorkerGroup):
             assert local_world_size <= pg.bundle_count, f"when generating for {self.name_prefix}, for the "
             for local_rank in range(local_world_size):
                 rank += 1
-
+                print(f"-----------rank id:{rank}")
                 # we pass in environment variable at option so that Worker can use environment variable to set
                 env_vars = {
                     "WORLD_SIZE": str(world_size),
@@ -291,7 +292,14 @@ class RayWorkerGroup(WorkerGroup):
 
                 if rank == 0:
                     register_center_actor = None
-                    for _ in range(120):
+                    print(f"name_prefix:{self.name_prefix}")
+                    print(f"Expected actor name: {self.name_prefix}_register_center")
+                    print("Listing all actors:")
+                    actors = ray.state.actors()
+                    for actor_id, actor_info in actors.items():
+                         print(f"Actor ID: {actor_id}, Name: {actor_info.get('name')}, Namespace: {actor_info.get('namespace')}, State: {actor_info.get('state')}")
+                         print(f"name_prefix: {self.name_prefix}") 
+                    for _ in range(300):
                         if f"{self.name_prefix}_register_center" not in list_named_actors():
                             time.sleep(1)
                         else:

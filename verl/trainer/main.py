@@ -15,6 +15,8 @@
 Note that we don't combine the main with ray_trainer as ray_trainer is used by other main.
 """
 
+import os
+
 import json
 
 import ray
@@ -28,12 +30,32 @@ from .config import PPOConfig
 from .ray_trainer import RayPPOTrainer, ResourcePoolManager, Role
 
 
-@ray.remote(num_cpus=1)
+@ray.remote(num_cpus=1, num_gpus=1)
 def main_task(config: PPOConfig):
     # please make sure main_task is not scheduled on head
     # print config
     config.deep_post_init()
     print(json.dumps(config.to_dict(), indent=2))
+
+
+###
+    # 加载 OpenVLA 的 processor 和 tokenizer
+    from transformers import AutoProcessor
+    # processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
+    processor = AutoProcessor.from_pretrained(
+        # ppo_config.worker.actor.model.model_path,  # /workspace/models/openvla-7b
+        config.worker.actor.model.model_path,
+        trust_remote_code=True,
+        local_files_only=True,  # 强制本地加载
+    )
+    tokenizer = processor.tokenizer
+
+    # 实例化 tokenizer 和 processor
+    # 已经通过 processor 获取，无需额外加载
+    # 如果需要单独加载 tokenizer，可以使用：
+    # from transformers import AutoTokenizer
+    # tokenizer = AutoTokenizer.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
+###
 
     # instantiate tokenizer
     tokenizer = get_tokenizer(
@@ -94,13 +116,29 @@ def main():
     default_config = OmegaConf.structured(PPOConfig())
     ppo_config = OmegaConf.merge(default_config, file_config, cli_args)
     ppo_config = OmegaConf.to_object(ppo_config)
-
+    print("Environment variables:", os.environ)
+    print("Starting Ray initialization...")
     if not ray.is_initialized():
-        # this is for local ray cluster
-        ray.init(runtime_env={"env_vars": {"TOKENIZERS_PARALLELISM": "true", "NCCL_DEBUG": "WARN"}})
-
+        # ray.init(runtime_env={"env_vars": {"TOKENIZERS_PARALLELISM": "true", "NCCL_DEBUG": "WARN"}})
+         # 在 Ray 初始化时设置默认环境变量
+        ray.init(
+            runtime_env={
+                "env_vars": {
+                    "TOKENIZERS_PARALLELISM": "true",
+                    "NCCL_DEBUG": "WARN",
+                    "MASTER_ADDR": os.environ.get("MASTER_ADDR", "172.18.0.2"),
+                    "MASTER_PORT": os.environ.get("MASTER_PORT", "63799"),
+                    "WG_BACKEND": 'ray',
+                }
+            }
+        )
+    print("Ray initialized successfully.")
+    print("Starting main_task...")
+    print("Ray cluster resources:", ray.cluster_resources())
+    print("Ray available resources:", ray.available_resources())
     ray.get(main_task.remote(ppo_config))
+    print("main_task completed.")
 
 
 if __name__ == "__main__":
-    main()
+    main()    

@@ -12,56 +12,91 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import sys
+sys.path.append('/workspace/verl')
 
 import torch
 from transformers import PreTrainedTokenizer
+
+# 导入 ActionTokenizer
+# from prismatic.vla.action_tokenizer import ActionTokenizer
+# 在 custom.py 中
+from ...prismatic.vla.action_tokenizer import ActionTokenizer  # 相对导入
 
 from ...protocol import DataProto
 from ...utils.reward_score import math_compute_score, r1v_compute_score
 
 
+# class CustomRewardManager:
+#     def __init__(self, tokenizer: PreTrainedTokenizer, num_examine: int, compute_score: str):
+#         self.tokenizer = tokenizer
+#         self.num_examine = num_examine
+#         if compute_score == "math":
+#             self.compute_score = math_compute_score
+#         elif compute_score == "r1v":
+#             self.compute_score = r1v_compute_score
+#         else:
+#             raise NotImplementedError()
+
+#     def __call__(self, data: DataProto) -> torch.Tensor:
+#         reward_tensor = torch.zeros_like(data.batch["responses"], dtype=torch.float32)
+#         already_print = 0
+
+#         for i in range(len(data)):
+#             data_item = data[i]  # DataProtoItem
+
+#             prompt_ids = data_item.batch["prompts"]
+#             prompt_length = prompt_ids.shape[-1]
+
+#             valid_prompt_length = data_item.batch["attention_mask"][:prompt_length].sum()
+#             valid_prompt_ids = prompt_ids[-valid_prompt_length:]
+
+#             response_ids = data_item.batch["responses"]
+#             valid_response_length = data_item.batch["attention_mask"][prompt_length:].sum()
+#             valid_response_ids = response_ids[:valid_response_length]
+
+#             # decode
+#             prompt_str = self.tokenizer.decode(valid_prompt_ids, skip_special_tokens=True)
+#             response_str = self.tokenizer.decode(valid_response_ids, skip_special_tokens=True)
+
+#             ground_truth = data_item.non_tensor_batch["ground_truth"]
+
+#             score = self.compute_score(response_str, ground_truth)
+#             reward_tensor[i, valid_response_length - 1] = score
+
+#             if already_print < self.num_examine:
+#                 already_print += 1
+#                 print("[prompt]", prompt_str)
+#                 print("[response]", response_str)
+#                 print("[ground_truth]", ground_truth)
+#                 print("[score]", score)
+
+#         return reward_tensor
+
 class CustomRewardManager:
-    def __init__(self, tokenizer: PreTrainedTokenizer, num_examine: int, compute_score: str):
-        self.tokenizer = tokenizer
-        self.num_examine = num_examine
-        if compute_score == "math":
-            self.compute_score = math_compute_score
-        elif compute_score == "r1v":
-            self.compute_score = r1v_compute_score
-        else:
-            raise NotImplementedError()
+    def __init__(self, compute_score, **kwargs):
+        self.compute_score_type = compute_score  # 存储 compute_score 参数
+        # 忽略其他参数（如 reward_type），或根据需要存储
+        self.kwargs = kwargs
+
+    def compute_action_reward(self, predicted_actions, ground_truth, state=None, goal=None):
+        default_goal = torch.zeros_like(predicted_actions) if goal is None else goal
+        distance = torch.norm(predicted_actions[:, :3] - default_goal[:, :3], dim=1)
+        return -distance
 
     def __call__(self, data: DataProto) -> torch.Tensor:
-        reward_tensor = torch.zeros_like(data.batch["responses"], dtype=torch.float32)
-        already_print = 0
+        predicted_actions = data.batch["predicted_actions"]
+        ground_truth = data.batch.get("actions", None)
 
-        for i in range(len(data)):
-            data_item = data[i]  # DataProtoItem
+        print("[predicted_actions]", predicted_actions)
+        print("[predicted_actions.shape]", predicted_actions.shape)
+        print("[ground_truth]", ground_truth)
+        print("[ground_truth.shape]", ground_truth.shape)
 
-            prompt_ids = data_item.batch["prompts"]
-            prompt_length = prompt_ids.shape[-1]
-
-            valid_prompt_length = data_item.batch["attention_mask"][:prompt_length].sum()
-            valid_prompt_ids = prompt_ids[-valid_prompt_length:]
-
-            response_ids = data_item.batch["responses"]
-            valid_response_length = data_item.batch["attention_mask"][prompt_length:].sum()
-            valid_response_ids = response_ids[:valid_response_length]
-
-            # decode
-            prompt_str = self.tokenizer.decode(valid_prompt_ids, skip_special_tokens=True)
-            response_str = self.tokenizer.decode(valid_response_ids, skip_special_tokens=True)
-
-            ground_truth = data_item.non_tensor_batch["ground_truth"]
-
-            score = self.compute_score(response_str, ground_truth)
-            reward_tensor[i, valid_response_length - 1] = score
-
-            if already_print < self.num_examine:
-                already_print += 1
-                print("[prompt]", prompt_str)
-                print("[response]", response_str)
-                print("[ground_truth]", ground_truth)
-                print("[score]", score)
-
+        # 根据 compute_score 类型选择奖励计算方法
+        if self.compute_score_type == "action":
+            score = self.compute_action_reward(predicted_actions, ground_truth)
+        else:
+            raise ValueError(f"Unsupported compute_score type: {self.compute_score_type}")
+        reward_tensor = score.unsqueeze(1).expand(-1, 7)
         return reward_tensor

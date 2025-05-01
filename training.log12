@@ -1,0 +1,485 @@
+[37mJob submission server address[39m: [1mhttp://127.0.0.1:8265[22m
+
+[32m-------------------------------------------------------[39m
+[32mJob 'raysubmit_UKBkeZRHYew5JptD' submitted successfully[39m
+[32m-------------------------------------------------------[39m
+
+[36mNext steps[39m
+  Query the logs of the job:
+    [1mray job logs raysubmit_UKBkeZRHYew5JptD[22m
+  Query the status of the job:
+    [1mray job status raysubmit_UKBkeZRHYew5JptD[22m
+  Request the job to be stopped:
+    [1mray job stop raysubmit_UKBkeZRHYew5JptD[22m
+
+Tailing logs until the job exits (disable with --no-wait):
+2025-04-29 06:17:36,500	INFO job_manager.py:531 -- Runtime env is setting up.
+++ export PYTHONPATH=/workspace/verl
+++ PYTHONPATH=/workspace/verl
+++ export NCCL_DEBUG=WARN
+++ NCCL_DEBUG=WARN
+++ export MASTER_ADDR=172.18.0.2
+++ MASTER_ADDR=172.18.0.2
+++ export MASTER_PORT=63799
+++ MASTER_PORT=63799
+++ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+++ PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+++ export TOKENIZERS_PARALLELISM=false
+++ TOKENIZERS_PARALLELISM=false
+++ export WANDB_API_KEY=e2e0261992fab6ce73072eaac4424f5a7e29a8f1
+++ WANDB_API_KEY=e2e0261992fab6ce73072eaac4424f5a7e29a8f1
+++ MODEL_PATH=/workspace/models/openvla-7b
+++ export CUDA_VISIBLE_DEVICES=1
+++ CUDA_VISIBLE_DEVICES=1
+++ SYSTEM_PROMPT='Act as a robot to perform the given task.'
+++ python3 -m verl.trainer.main config=examples/grpo_example_vla.yaml 'data.system_prompt=Act as a robot to perform the given task.' worker.actor.model.model_path=/workspace/models/openvla-7b worker.rollout.enable_chunked_prefill=false trainer.experiment_name=openvla_7b_robot trainer.n_gpus_per_node=1
+2025-04-29 06:17:42.261167: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-04-29 06:17:42.299022: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-04-29 06:17:42.299055: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2025-04-29 06:17:42.301066: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-04-29 06:17:42.307916: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Using LIBERO constants:
+  NUM_ACTIONS_CHUNK = 5
+  ACTION_DIM = 7
+  PROPRIO_DIM = 7
+  ACTION_PROPRIO_NORMALIZATION_TYPE = bounds_q99
+If needed, manually set the correct constants in `prismatic/vla/constants.py`!
+2025-04-29 06:17:45.576066: E external/local_xla/xla/stream_executor/cuda/cuda_driver.cc:274] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+2025-04-29 06:17:45.576094: I external/local_xla/xla/stream_executor/cuda/cuda_diagnostics.cc:129] retrieving CUDA diagnostic information for host: 2b99d32fc3df
+2025-04-29 06:17:45.576099: I external/local_xla/xla/stream_executor/cuda/cuda_diagnostics.cc:136] hostname: 2b99d32fc3df
+2025-04-29 06:17:45.576136: I external/local_xla/xla/stream_executor/cuda/cuda_diagnostics.cc:159] libcuda reported version is: 550.144.3
+2025-04-29 06:17:45.576148: I external/local_xla/xla/stream_executor/cuda/cuda_diagnostics.cc:163] kernel reported version is: 550.144.3
+2025-04-29 06:17:45.576151: I external/local_xla/xla/stream_executor/cuda/cuda_diagnostics.cc:241] kernel version seems to match DSO: 550.144.3
+Environment variables: environ({'NPP_VERSION': '12.2.1.4', 'SHELL': '/bin/bash', 'NVIDIA_VISIBLE_DEVICES': 'all', 'COLORTERM': 'truecolor', 'DALI_BUILD': '9783408', 'RAY_worker_niceness': '0', 'PYTHONUNBUFFERED': '1', 'CUSOLVER_VERSION': '11.5.2.141', 'NVM_INC': '/usr/local/nvm/versions/node/v16.20.2/include/node', 'TERM_PROGRAM_VERSION': '1.99.3', 'CUBLAS_VERSION': '12.2.5.6', 'HOSTNAME': '2b99d32fc3df', 'NODE_OPTIONS': '', 'MASTER_PORT': '63799', 'NVIDIA_REQUIRE_CUDA': 'cuda>=9.0', 'CUFFT_VERSION': '11.0.8.103', 'CUDA_CACHE_DISABLE': '1', 'RAY_JOB_CONFIG_JSON_ENV_VAR': '{"runtime_env": {"env_vars": {}}, "metadata": {"job_submission_id": "raysubmit_UKBkeZRHYew5JptD", "job_name": "raysubmit_UKBkeZRHYew5JptD"}}', 'TENSORBOARD_PORT': '6006', 'REMOTE_CONTAINERS_IPC': '/tmp/vscode-remote-containers-ipc-424627e0-64cc-48a7-8e2b-c0c5118bd407.sock', 'HABANA_VISIBLE_MODULES': '', 'TORCH_CUDA_ARCH_LIST': '5.2 6.0 6.1 7.0 7.2 7.5 8.0 8.6 8.7 9.0+PTX', 'NCCL_VERSION': '2.19.3', 'OPENBLAS_VERSION': '0.3.23', 'ASCEND_RT_VISIBLE_DEVICES': '', 'CUSPARSE_VERSION': '12.1.2.141', 'ENV': '/etc/shinit_v2', 'PWD': '/workspace', 'OPENUCX_VERSION': '1.15.0', 'NSIGHT_SYSTEMS_VERSION': '2023.3.1.92', 'NVIDIA_DRIVER_CAPABILITIES': 'graphics,utility,compute', 'POLYGRAPHY_VERSION': '0.49.0', 'NCCL_DEBUG': 'WARN', 'RAY_EXPERIMENTAL_NOSET_CUDA_VISIBLE_DEVICES': '1', 'UCC_CL_BASIC_TLS': '^sharp', 'VLLM_WORKER_MULTIPROC_METHOD': 'spawn', 'TRT_VERSION': '8.6.1.6+cuda12.0.1.011', 'VSCODE_GIT_ASKPASS_NODE': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/node', 'NVIDIA_PRODUCT_NAME': 'PyTorch', 'RDMACORE_VERSION': '39.0', 'RAY_CLIENT_MODE': '0', 'TOKENIZERS_PARALLELISM': 'false', 'HOME': '/root', 'LANG': 'en_US.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'REMOTE_CONTAINERS': 'true', 'COCOAPI_VERSION': '2.0+nv0.7.3', 'CUDA_VERSION': '12.2.2.009', 'RAY_USAGE_STATS_ENABLED': '1', 'PYTORCH_VERSION': '2.1.0a0+32f93b1', 'CURAND_VERSION': '10.3.3.141', 'GIT_ASKPASS': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/extensions/git/dist/askpass.sh', 'PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION': 'python', 'PYTORCH_BUILD_NUMBER': '0', 'USE_EXPERIMENTAL_CUDNN_V8_API': '1', 'CUTENSOR_VERSION': '1.7.0.1', 'PIP_DEFAULT_TIMEOUT': '100', 'SPT_NOENV': '1', 'PYTORCH_CUDA_ALLOC_CONF': 'expandable_segments:True', 'HPCX_VERSION': '2.16rc4', 'TORCH_CUDNN_V8_API_ENABLED': '1', 'NVM_DIR': '/usr/local/nvm', 'MASTER_ADDR': '172.18.0.2', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'CUDA_VISIBLE_DEVICES': '1', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PYTHONPATH': '/workspace/verl', 'TERM': 'xterm-256color', 'SETUPTOOLS_USE_DISTUTILS': 'stdlib', 'GDRCOPY_VERSION': '2.3', 'NEURON_RT_VISIBLE_CORES': '', 'REMOTE_CONTAINERS_SOCKETS': '["/root/.gnupg/S.gpg-agent"]', 'LESSOPEN': '| /usr/bin/lesspipe %s', 'OPENMPI_VERSION': '4.1.5rc2', 'NVJPEG_VERSION': '12.2.2.4', 'LIBRARY_PATH': '/usr/local/cuda/lib64/stubs:', 'WANDB_API_KEY': 'e2e0261992fab6ce73072eaac4424f5a7e29a8f1', 'VSCODE_GIT_IPC_HANDLE': '/tmp/vscode-git-f8c851e605.sock', 'PYTHONIOENCODING': 'utf-8', 'SHLVL': '4', 'NVM_CD_FLAGS': '', 'MAX_JOBS': '32', 'BASH_ENV': '/etc/bash.bashrc', 'CUDNN_VERSION': '8.9.5.29', 'NSIGHT_COMPUTE_VERSION': '2023.2.2.3', 'RAY_ADDRESS': '172.18.0.2:6379', 'DALI_VERSION': '1.30.0', 'JUPYTER_PORT': '8888', 'PYTORCH_HOME': '/opt/pytorch/pytorch', 'LD_LIBRARY_PATH': '/usr/local/lib/python3.10/dist-packages/cv2/../../lib64:/usr/local/lib/python3.10/dist-packages/torch/lib:/usr/local/lib/python3.10/dist-packages/torch_tensorrt/lib:/usr/local/cuda/compat/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64', 'NVIDIA_BUILD_ID': '71422337', 'PYTHONBREAKPOINT': 'ray.util.rpdb.set_trace', 'OMPI_MCA_coll_hcoll_enable': '0', 'OPAL_PREFIX': '/opt/hpcx/ompi', 'OMP_NUM_THREADS': '1', 'CUDA_DRIVER_VERSION': '535.104.05', 'TRANSFORMER_ENGINE_VERSION': '0.12', 'LC_ALL': 'C.UTF-8', 'PYTORCH_BUILD_VERSION': '2.1.0a0+32f93b1', '_CUDA_COMPAT_PATH': '/usr/local/cuda/compat', 'VSCODE_GIT_ASKPASS_MAIN': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/extensions/git/dist/askpass-main.js', 'CUDA_HOME': '/usr/local/cuda', 'CUDA_MODULE_LOADING': 'LAZY', 'NVIDIA_REQUIRE_JETPACK_HOST_MOUNTS': '', 'BROWSER': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/bin/helpers/browser.sh', 'PATH': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/bin/remote-cli:/usr/local/nvm/versions/node/v16.20.2/bin:/usr/local/lib/python3.10/dist-packages/torch_tensorrt/bin:/usr/local/mpi/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/ucx/bin:/opt/tensorrt/bin', 'MOFED_VERSION': '5.4-rdmacore39.0', 'NVM_BIN': '/usr/local/nvm/versions/node/v16.20.2/bin', 'NVIDIA_PYTORCH_VERSION': '23.10', 'RAY_LD_PRELOAD': '1', 'TRTOSS_VERSION': '23.10', 'DEBIAN_FRONTEND': 'noninteractive', 'TORCH_ALLOW_TF32_CUBLAS_OVERRIDE': '1', 'OLDPWD': '/workspace/dlimp', 'TERM_PROGRAM': 'vscode', 'VSCODE_IPC_HOOK_CLI': '/tmp/vscode-ipc-37be11fc-9517-4334-8272-48e17d625736.sock', '_': '/usr/bin/python3', 'LAZY_LEGACY_OP': 'False', 'TF2_BEHAVIOR': '1', 'TPU_ML_PLATFORM': 'Tensorflow', 'KMP_DUPLICATE_LIB_OK': 'True', 'KMP_INIT_AT_FORK': 'FALSE', 'NCCL_CUMEM_ENABLE': '0', 'TORCHINDUCTOR_COMPILE_THREADS': '1'})
+Starting Ray initialization...
+2025-04-29 06:18:02,355	INFO worker.py:1520 -- Using address 172.18.0.2:6379 set in the environment variable RAY_ADDRESS
+2025-04-29 06:18:02,355	INFO worker.py:1660 -- Connecting to existing Ray cluster at address: 172.18.0.2:6379...
+2025-04-29 06:18:02,369	INFO worker.py:1843 -- Connected to Ray cluster. View the dashboard at [1m[32m127.0.0.1:8265 [39m[22m
+Ray initialized successfully.
+Starting main_task...
+Ray cluster resources: {'object_store_memory': 200000000000.0, 'CPU': 224.0, 'node:__internal_head__': 1.0, 'accelerator_type:H20': 1.0, 'GPU': 8.0, 'node:172.18.0.2': 1.0, 'memory': 879957876736.0}
+Ray available resources: {'accelerator_type:H20': 1.0, 'node:172.18.0.2': 1.0, 'object_store_memory': 200000000000.0, 'memory': 879957876736.0, 'node:__internal_head__': 1.0, 'GPU': 8.0, 'CPU': 224.0}
+[36m(pid=567710)[0m 2025-04-29 06:18:06.927651: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[36m(pid=567710)[0m 2025-04-29 06:18:06.965940: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+[36m(pid=567710)[0m 2025-04-29 06:18:06.965971: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+[36m(pid=567710)[0m 2025-04-29 06:18:06.967801: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+[36m(pid=567710)[0m 2025-04-29 06:18:06.974385: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+[36m(pid=567710)[0m To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+[36m(pid=567710)[0m Using LIBERO constants:
+[36m(pid=567710)[0m   NUM_ACTIONS_CHUNK = 5
+[36m(pid=567710)[0m   ACTION_DIM = 7
+[36m(pid=567710)[0m   PROPRIO_DIM = 7
+[36m(pid=567710)[0m   ACTION_PROPRIO_NORMALIZATION_TYPE = bounds_q99
+[36m(pid=567710)[0m If needed, manually set the correct constants in `prismatic/vla/constants.py`!
+[36m(pid=567710)[0m 2025-04-29 06:18:09.861369: E external/local_xla/xla/stream_executor/cuda/cuda_driver.cc:274] failed call to cuInit: CUDA_ERROR_NO_DEVICE: no CUDA-capable device is detected
+[36m(pid=567710)[0m 2025-04-29 06:18:09.861398: I external/local_xla/xla/stream_executor/cuda/cuda_diagnostics.cc:129] retrieving CUDA diagnostic information for host: 2b99d32fc3df
+[36m(pid=567710)[0m 2025-04-29 06:18:09.861403: I external/local_xla/xla/stream_executor/cuda/cuda_diagnostics.cc:136] hostname: 2b99d32fc3df
+[36m(pid=567710)[0m 2025-04-29 06:18:09.861439: I external/local_xla/xla/stream_executor/cuda/cuda_diagnostics.cc:159] libcuda reported version is: 550.144.3
+[36m(pid=567710)[0m 2025-04-29 06:18:09.861450: I external/local_xla/xla/stream_executor/cuda/cuda_diagnostics.cc:163] kernel reported version is: 550.144.3
+[36m(pid=567710)[0m 2025-04-29 06:18:09.861453: I external/local_xla/xla/stream_executor/cuda/cuda_diagnostics.cc:241] kernel version seems to match DSO: 550.144.3
+[36m(main_task pid=567710)[0m Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.48, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+[36m(main_task pid=567710)[0m {
+[36m(main_task pid=567710)[0m   "data": {
+[36m(main_task pid=567710)[0m     "data_root_dir": "/workspace",
+[36m(main_task pid=567710)[0m     "data_mix": "bridge_orig",
+[36m(main_task pid=567710)[0m     "prompt_key": "steps/language_instruction",
+[36m(main_task pid=567710)[0m     "answer_key": "steps/action",
+[36m(main_task pid=567710)[0m     "image_key": "steps/observation/image_0",
+[36m(main_task pid=567710)[0m     "max_prompt_length": 128,
+[36m(main_task pid=567710)[0m     "max_response_length": 7,
+[36m(main_task pid=567710)[0m     "rollout_batch_size": 2,
+[36m(main_task pid=567710)[0m     "system_prompt": "Act as a robot to perform the given task.",
+[36m(main_task pid=567710)[0m     "shuffle": true,
+[36m(main_task pid=567710)[0m     "seed": 1,
+[36m(main_task pid=567710)[0m     "max_pixels": 150528,
+[36m(main_task pid=567710)[0m     "min_pixels": 150528
+[36m(main_task pid=567710)[0m   },
+[36m(main_task pid=567710)[0m   "worker": {
+[36m(main_task pid=567710)[0m     "hybrid_engine": true,
+[36m(main_task pid=567710)[0m     "actor": {
+[36m(main_task pid=567710)[0m       "strategy": "fsdp",
+[36m(main_task pid=567710)[0m       "global_batch_size": 2,
+[36m(main_task pid=567710)[0m       "micro_batch_size_per_device_for_update": 1,
+[36m(main_task pid=567710)[0m       "micro_batch_size_per_device_for_experience": 1,
+[36m(main_task pid=567710)[0m       "max_grad_norm": 1.0,
+[36m(main_task pid=567710)[0m       "clip_ratio": 0.2,
+[36m(main_task pid=567710)[0m       "entropy_coeff": 0.001,
+[36m(main_task pid=567710)[0m       "use_kl_loss": true,
+[36m(main_task pid=567710)[0m       "kl_loss_coef": 0.001,
+[36m(main_task pid=567710)[0m       "kl_loss_type": "low_var_kl",
+[36m(main_task pid=567710)[0m       "ppo_epochs": 1,
+[36m(main_task pid=567710)[0m       "padding_free": false,
+[36m(main_task pid=567710)[0m       "ulysses_sequence_parallel_size": 1,
+[36m(main_task pid=567710)[0m       "model": {
+[36m(main_task pid=567710)[0m         "model_path": "/workspace/models/openvla-7b",
+[36m(main_task pid=567710)[0m         "tokenizer_path": "/workspace/models/openvla-7b",
+[36m(main_task pid=567710)[0m         "override_config": {},
+[36m(main_task pid=567710)[0m         "enable_gradient_checkpointing": true,
+[36m(main_task pid=567710)[0m         "trust_remote_code": true,
+[36m(main_task pid=567710)[0m         "freeze_vision_tower": false
+[36m(main_task pid=567710)[0m       },
+[36m(main_task pid=567710)[0m       "optim": {
+[36m(main_task pid=567710)[0m         "lr": 1e-05,
+[36m(main_task pid=567710)[0m         "betas": [
+[36m(main_task pid=567710)[0m           0.9,
+[36m(main_task pid=567710)[0m           0.999
+[36m(main_task pid=567710)[0m         ],
+[36m(main_task pid=567710)[0m         "weight_decay": 0.1,
+[36m(main_task pid=567710)[0m         "lr_warmup_ratio": 0.0,
+[36m(main_task pid=567710)[0m         "min_lr_ratio": null,
+[36m(main_task pid=567710)[0m         "warmup_style": "constant",
+[36m(main_task pid=567710)[0m         "training_steps": -1
+[36m(main_task pid=567710)[0m       },
+[36m(main_task pid=567710)[0m       "fsdp": {
+[36m(main_task pid=567710)[0m         "enable_full_shard": true,
+[36m(main_task pid=567710)[0m         "enable_cpu_offload": false,
+[36m(main_task pid=567710)[0m         "enable_rank0_init": true,
+[36m(main_task pid=567710)[0m         "use_orig_params": false,
+[36m(main_task pid=567710)[0m         "torch_dtype": null,
+[36m(main_task pid=567710)[0m         "fsdp_size": -1,
+[36m(main_task pid=567710)[0m         "mp_param_dtype": "bf16",
+[36m(main_task pid=567710)[0m         "mp_reduce_dtype": "fp32",
+[36m(main_task pid=567710)[0m         "mp_buffer_dtype": "fp32"
+[36m(main_task pid=567710)[0m       },
+[36m(main_task pid=567710)[0m       "offload": {
+[36m(main_task pid=567710)[0m         "offload_params": false,
+[36m(main_task pid=567710)[0m         "offload_optimizer": false
+[36m(main_task pid=567710)[0m       },
+[36m(main_task pid=567710)[0m       "global_batch_size_per_device": -1
+[36m(main_task pid=567710)[0m     },
+[36m(main_task pid=567710)[0m     "critic": {
+[36m(main_task pid=567710)[0m       "strategy": "fsdp",
+[36m(main_task pid=567710)[0m       "global_batch_size": 256,
+[36m(main_task pid=567710)[0m       "micro_batch_size_per_device_for_update": 4,
+[36m(main_task pid=567710)[0m       "micro_batch_size_per_device_for_experience": 16,
+[36m(main_task pid=567710)[0m       "max_grad_norm": 1.0,
+[36m(main_task pid=567710)[0m       "cliprange_value": 0.5,
+[36m(main_task pid=567710)[0m       "ppo_epochs": 1,
+[36m(main_task pid=567710)[0m       "padding_free": false,
+[36m(main_task pid=567710)[0m       "ulysses_sequence_parallel_size": 1,
+[36m(main_task pid=567710)[0m       "model": {
+[36m(main_task pid=567710)[0m         "model_path": null,
+[36m(main_task pid=567710)[0m         "tokenizer_path": null,
+[36m(main_task pid=567710)[0m         "override_config": {},
+[36m(main_task pid=567710)[0m         "enable_gradient_checkpointing": true,
+[36m(main_task pid=567710)[0m         "trust_remote_code": true,
+[36m(main_task pid=567710)[0m         "freeze_vision_tower": false
+[36m(main_task pid=567710)[0m       },
+[36m(main_task pid=567710)[0m       "optim": {
+[36m(main_task pid=567710)[0m         "lr": 1e-06,
+[36m(main_task pid=567710)[0m         "betas": [
+[36m(main_task pid=567710)[0m           0.9,
+[36m(main_task pid=567710)[0m           0.999
+[36m(main_task pid=567710)[0m         ],
+[36m(main_task pid=567710)[0m         "weight_decay": 0.01,
+[36m(main_task pid=567710)[0m         "lr_warmup_ratio": 0.0,
+[36m(main_task pid=567710)[0m         "min_lr_ratio": null,
+[36m(main_task pid=567710)[0m         "warmup_style": "constant",
+[36m(main_task pid=567710)[0m         "training_steps": -1
+[36m(main_task pid=567710)[0m       },
+[36m(main_task pid=567710)[0m       "fsdp": {
+[36m(main_task pid=567710)[0m         "enable_full_shard": true,
+[36m(main_task pid=567710)[0m         "enable_cpu_offload": false,
+[36m(main_task pid=567710)[0m         "enable_rank0_init": false,
+[36m(main_task pid=567710)[0m         "use_orig_params": false,
+[36m(main_task pid=567710)[0m         "torch_dtype": null,
+[36m(main_task pid=567710)[0m         "fsdp_size": -1,
+[36m(main_task pid=567710)[0m         "mp_param_dtype": "bf16",
+[36m(main_task pid=567710)[0m         "mp_reduce_dtype": "fp32",
+[36m(main_task pid=567710)[0m         "mp_buffer_dtype": "fp32"
+[36m(main_task pid=567710)[0m       },
+[36m(main_task pid=567710)[0m       "offload": {
+[36m(main_task pid=567710)[0m         "offload_params": false,
+[36m(main_task pid=567710)[0m         "offload_optimizer": false
+[36m(main_task pid=567710)[0m       },
+[36m(main_task pid=567710)[0m       "global_batch_size_per_device": -1
+[36m(main_task pid=567710)[0m     },
+[36m(main_task pid=567710)[0m     "ref": {
+[36m(main_task pid=567710)[0m       "strategy": "fsdp",
+[36m(main_task pid=567710)[0m       "fsdp": {
+[36m(main_task pid=567710)[0m         "enable_full_shard": true,
+[36m(main_task pid=567710)[0m         "enable_cpu_offload": true,
+[36m(main_task pid=567710)[0m         "enable_rank0_init": true,
+[36m(main_task pid=567710)[0m         "use_orig_params": false,
+[36m(main_task pid=567710)[0m         "torch_dtype": null,
+[36m(main_task pid=567710)[0m         "fsdp_size": -1,
+[36m(main_task pid=567710)[0m         "mp_param_dtype": "bf16",
+[36m(main_task pid=567710)[0m         "mp_reduce_dtype": "fp32",
+[36m(main_task pid=567710)[0m         "mp_buffer_dtype": "fp32"
+[36m(main_task pid=567710)[0m       },
+[36m(main_task pid=567710)[0m       "offload": {
+[36m(main_task pid=567710)[0m         "offload_params": false,
+[36m(main_task pid=567710)[0m         "offload_optimizer": false
+[36m(main_task pid=567710)[0m       },
+[36m(main_task pid=567710)[0m       "micro_batch_size_per_device_for_experience": 1,
+[36m(main_task pid=567710)[0m       "padding_free": false,
+[36m(main_task pid=567710)[0m       "ulysses_sequence_parallel_size": 1
+[36m(main_task pid=567710)[0m     },
+[36m(main_task pid=567710)[0m     "reward": {
+[36m(main_task pid=567710)[0m       "reward_type": "function",
+[36m(main_task pid=567710)[0m       "compute_score": "action"
+[36m(main_task pid=567710)[0m     },
+[36m(main_task pid=567710)[0m     "rollout": {
+[36m(main_task pid=567710)[0m       "name": "vllm",
+[36m(main_task pid=567710)[0m       "temperature": 1.0,
+[36m(main_task pid=567710)[0m       "top_k": -1,
+[36m(main_task pid=567710)[0m       "top_p": 1.0,
+[36m(main_task pid=567710)[0m       "dtype": "bf16",
+[36m(main_task pid=567710)[0m       "gpu_memory_utilization": 0.5,
+[36m(main_task pid=567710)[0m       "ignore_eos": false,
+[36m(main_task pid=567710)[0m       "enforce_eager": false,
+[36m(main_task pid=567710)[0m       "free_cache_engine": false,
+[36m(main_task pid=567710)[0m       "enable_chunked_prefill": false,
+[36m(main_task pid=567710)[0m       "tensor_parallel_size": 1,
+[36m(main_task pid=567710)[0m       "max_num_batched_tokens": 8192,
+[36m(main_task pid=567710)[0m       "max_num_seqs": 1024,
+[36m(main_task pid=567710)[0m       "disable_log_stats": true,
+[36m(main_task pid=567710)[0m       "do_sample": true,
+[36m(main_task pid=567710)[0m       "n": 1,
+[36m(main_task pid=567710)[0m       "limit_images": 1,
+[36m(main_task pid=567710)[0m       "prompt_length": 128,
+[36m(main_task pid=567710)[0m       "response_length": 7
+[36m(main_task pid=567710)[0m     }
+[36m(main_task pid=567710)[0m   },
+[36m(main_task pid=567710)[0m   "algorithm": {
+[36m(main_task pid=567710)[0m     "gamma": 1.0,
+[36m(main_task pid=567710)[0m     "lam": 1.0,
+[36m(main_task pid=567710)[0m     "adv_estimator": "grpo",
+[36m(main_task pid=567710)[0m     "kl_penalty": "kl",
+[36m(main_task pid=567710)[0m     "kl_type": "fixed",
+[36m(main_task pid=567710)[0m     "kl_coef": 0.0,
+[36m(main_task pid=567710)[0m     "kl_horizon": 0.0,
+[36m(main_task pid=567710)[0m     "kl_target": 0.0
+[36m(main_task pid=567710)[0m   },
+[36m(main_task pid=567710)[0m   "trainer": {
+[36m(main_task pid=567710)[0m     "total_episodes": 15,
+[36m(main_task pid=567710)[0m     "max_steps": null,
+[36m(main_task pid=567710)[0m     "project_name": "easy_r1",
+[36m(main_task pid=567710)[0m     "experiment_name": "openvla_7b_robot",
+[36m(main_task pid=567710)[0m     "logger": [
+[36m(main_task pid=567710)[0m       "console"
+[36m(main_task pid=567710)[0m     ],
+[36m(main_task pid=567710)[0m     "nnodes": 2,
+[36m(main_task pid=567710)[0m     "n_gpus_per_node": 1,
+[36m(main_task pid=567710)[0m     "critic_warmup": 0,
+[36m(main_task pid=567710)[0m     "val_freq": 0,
+[36m(main_task pid=567710)[0m     "val_before_train": false,
+[36m(main_task pid=567710)[0m     "val_only": false,
+[36m(main_task pid=567710)[0m     "val_generations_to_log": 1,
+[36m(main_task pid=567710)[0m     "save_freq": 5,
+[36m(main_task pid=567710)[0m     "remove_previous_ckpt": false,
+[36m(main_task pid=567710)[0m     "remove_ckpt_after_load": false,
+[36m(main_task pid=567710)[0m     "save_checkpoint_path": "checkpoints/easy_r1/openvla_7b_robot",
+[36m(main_task pid=567710)[0m     "load_checkpoint_path": null
+[36m(main_task pid=567710)[0m   }
+[36m(main_task pid=567710)[0m }
+[36m(main_task pid=567710)[0m `use_fast` is set to `True` but the image processor class does not have a fast version.  Falling back to the slow version.
+[36m(main_task pid=567710)[0m 04/29 [06:18:26] INFO     | >> Load dataset info from        dataset_info.py:707
+[36m(main_task pid=567710)[0m                           /workspace/bridge_orig/1.0.0                          
+[36m(main_task pid=567710)[0m                  INFO     | >> Creating a tf.data.Dataset reading  reader.py:262
+[36m(main_task pid=567710)[0m                           1152 files located in folders:                        
+[36m(main_task pid=567710)[0m                           /workspace/bridge_orig/1.0.0.                         
+[36m(main_task pid=567710)[0m 2025-04-29 06:18:26.669893: I tensorflow/core/grappler/optimizers/data/replicate_on_split.cc:32] Running replicate on split optimization
+[36m(main_task pid=567710)[0m                  INFO     | >> Constructing tf.data.Dataset logging_logger.py:49
+[36m(main_task pid=567710)[0m                           bridge_dataset for split all,                         
+[36m(main_task pid=567710)[0m                           from /workspace/bridge_orig/1.0.0                     
+[36m(main_task pid=567710)[0m 04/29 [06:18:27] INFO     | >> [*] Loading existing dataset    data_utils.py:199
+[36m(main_task pid=567710)[0m                           statistics from                                       
+[36m(main_task pid=567710)[0m                           /workspace/bridge_orig/1.0.0/dataset                  
+[36m(main_task pid=567710)[0m                           _statistics_8195b16c5704f4d93daacfa1                  
+[36m(main_task pid=567710)[0m                           8a63ebffdfbd858e3c0467a912e8d1b7c1e5                  
+[36m(main_task pid=567710)[0m                           0360.json.                                            
+[36m(main_task pid=567710)[0m                  INFO     | >> Creating a tf.data.Dataset reading  reader.py:262
+[36m(main_task pid=567710)[0m                           1024 files located in folders:                        
+[36m(main_task pid=567710)[0m                           /workspace/bridge_orig/1.0.0.                         
+[36m(main_task pid=567710)[0m                  INFO     | >> Constructing tf.data.Dataset logging_logger.py:49
+[36m(main_task pid=567710)[0m                           bridge_dataset for split train,                       
+[36m(main_task pid=567710)[0m                           from /workspace/bridge_orig/1.0.0                     
+[36m(main_task pid=567710)[0m 2025-04-29 06:18:27.562854: I tensorflow/core/grappler/optimizers/data/replicate_on_split.cc:32] Running replicate on split optimization
+[36m(main_task pid=567710)[0m 
+[36m(main_task pid=567710)[0m ######################################################################################
+[36m(main_task pid=567710)[0m # Loading the following 1 datasets (incl. sampling weight):                         #
+[36m(main_task pid=567710)[0m # bridge_orig: =============================================================1.000000 #
+[36m(main_task pid=567710)[0m ######################################################################################
+[36m(main_task pid=567710)[0m 
+[36m(main_task pid=567710)[0m 04/29 [06:18:28] INFO     | >> [*] Threads per Dataset: [1]       dataset.py:528
+[36m(main_task pid=567710)[0m                  INFO     | >> [*] Reads per Dataset: [1]         dataset.py:529
+[36m(main_task pid=567710)[0m                  INFO     | >> [*] Constructing datasets...       dataset.py:532
+[36m(main_task pid=567710)[0m                  INFO     | >> Load dataset info from        dataset_info.py:707
+[36m(main_task pid=567710)[0m                           /workspace/bridge_orig/1.0.0                          
+[36m(main_task pid=567710)[0m                  INFO     | >> Creating a tf.data.Dataset reading  reader.py:262
+[36m(main_task pid=567710)[0m                           1024 files located in folders:                        
+[36m(main_task pid=567710)[0m                           /workspace/bridge_orig/1.0.0.                         
+[36m(main_task pid=567710)[0m 2025-04-29 06:18:28.408487: I tensorflow/core/grappler/optimizers/data/replicate_on_split.cc:32] Running replicate on split optimization
+[36m(main_task pid=567710)[0m                  INFO     | >> Constructing tf.data.Dataset logging_logger.py:49
+[36m(main_task pid=567710)[0m                           bridge_dataset for split train,                       
+[36m(main_task pid=567710)[0m                           from /workspace/bridge_orig/1.0.0                     
+[36m(main_task pid=567710)[0m 04/29 [06:18:29] INFO     | >> [*] Applying frame transforms on   dataset.py:572
+[36m(main_task pid=567710)[0m                           dataset...                                            
+[36m(main_task pid=567710)[0m DeprecationWarning: `ray.state.available_resources_per_node` is a private attribute and access will be removed in a future Ray version.
+[36m(main_task pid=567710)[0m Size of train dataloader: 1067731
+[36m(main_task pid=567710)[0m Total training steps: 16015965
+[36m(main_task pid=567710)[0m in RayProcessDispatchConfiguration: name_prefix = global_pool
+[36m(main_task pid=567710)[0m pg_name_prefix = global_poolverl_group_1_1:
+[36m(main_task pid=567710)[0m -----------rank id:0
+[36m(main_task pid=567710)[0m DeprecationWarning: `ray.state.actors` is a private attribute and access will be removed in a future Ray version.
+[36m(main_task pid=567710)[0m name_prefix:vKv3Rf
+[36m(main_task pid=567710)[0m Expected actor name: vKv3Rf_register_center
+[36m(main_task pid=567710)[0m Listing all actors:
+[36m(main_task pid=567710)[0m Actor ID: 029938865115dfe7290f6b7e1c000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 5ce00c0be1c811588140e0c502000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: e30a927b061ce47b51687fbf01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 6ea0e3fdcbd41fd479da41e50f000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: dc8157b4c09d5b6ff75d3d4901000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 18c689ab6b4f768ceca0420a01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: bf356aac1b853310280d592716000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: b241b65737fa83bf72afed2e01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: d6924fccc1b9e582ed94c89511000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 0bddfcd9f0df8bb7a139566e17000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 4f42cbb2c0643baf0fd773e51a000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: cf18cec21e5e8827155a493a10000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 81e3f61433645e6f76e2cc0401000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 2e5b95a6a8fe1543c5de93c913000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: e8030dea441bbca8a371e9d501000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 58564909e1adb1a45da7746c15000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 0ea76a35f7e573d396d8e37201000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 47e6de88fd7f0e8b8decb56401000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: d8a5808525a06454032d168f06000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 8816bb3bf76246c67b228efe01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 16f2b1a77282f07384ea5c1712000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 8b58f36d25345262bf1bc80001000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 88063f507e7add6f82b7943f01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 71d4e31fc26b21c9474ee0ff01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 63cb6c3005428731f4accfb801000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 9bc0b3725d88c15b89e06b1e1b000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 99ae3bc1c1b772ad21a1b94f01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: d2cc7060e3ad0da050d3763201000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 39f95a9060c90335ac33f11f19000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 330ad13c34627a002ee1da3f01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 21de65af4cd4b228e06d35a001000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: fbc199afa950aa3d46bc3a3901000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 416e5a40e1d76d393bd1c7b404000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: bcfa6c3b6f179ff9e6e1207201000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 41eb054a6f68b7683ccceb8801000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: c99fde0c8280e394dd9a30fc01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 8bd4b915bebc1a8e6de9ddab01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: b385706fd97acb449bd280a505000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 954c5e4b3f39430f2c60258d14000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 97b9f88144c063c4e914e51301000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 09e8edc7869dc348565da7d801000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: eee99486df6653be7f6f5a7a01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: a942cb0ea9bcd28c8c82034a01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 2cb9d37106051a191e58256e01000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: cbf6a7902d69566bf8234c9701000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 7e5b1eecbb21ef83407194d101000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: b303580d5b4cebd8508262c207000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 6d15ce25c0cf503c13bbe9950e000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: dc6a53bce77925a85c9dfd4101000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: cd9be8bb6ac79eafc3ef976301000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: a23fb33c1cb1a21c88b529c50d000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: 5675a65f28dfab3768dc7f3a08000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(main_task pid=567710)[0m Actor ID: a6408ad3ee85692b8d6b9b5803000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=567710)[0m name_prefix: vKv3Rf
+[36m(pid=568921)[0m 2025-04-29 06:18:36.136890: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[36m(pid=568921)[0m 2025-04-29 06:18:36.176391: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+[36m(pid=568921)[0m 2025-04-29 06:18:36.176446: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+[36m(pid=568921)[0m 2025-04-29 06:18:36.178313: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+[36m(pid=568921)[0m 2025-04-29 06:18:36.185510: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+[36m(pid=568921)[0m To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/verl/trainer/main.py", line 160, in <module>
+    main()    
+  File "/workspace/verl/trainer/main.py", line 155, in main
+    ray.get(main_task.remote(ppo_config))
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/auto_init_hook.py", line 21, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/worker.py", line 2782, in get
+    values, debugger_breakpoint = worker.get_objects(object_refs, timeout=timeout)
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/worker.py", line 929, in get_objects
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(AssertionError): [36mray::main_task()[39m (pid=567710, ip=172.18.0.2)
+  File "/workspace/verl/trainer/main.py", line 123, in main_task
+    trainer.init_workers()
+  File "/workspace/verl/trainer/ray_trainer.py", line 1298, in init_workers
+    wg_dict = self.ray_worker_group_cls(resource_pool=resource_pool, ray_cls_with_init=worker_dict_cls)
+  File "/workspace/verl/single_controller/ray/base.py", line 226, in __init__
+    self._init_with_resource_pool(
+  File "/workspace/verl/single_controller/ray/base.py", line 308, in _init_with_resource_pool
+    assert register_center_actor is not None, (
+AssertionError: failed to get register_center_actor: vKv3Rf_register_center in [{'name': 'datasets_stats_actor', 'namespace': '_dataset_stats_actor'}, {'name': '_ray_internal_job_actor_raysubmit_UKBkeZRHYew5JptD', 'namespace': 'SUPERVISOR_ACTOR_RAY_NAMESPACE'}, {'name': 'vKv3RfWorkerDict_0:0', 'namespace': '6ca0b575-2096-4569-afaf-78a6b7e44948'}]
+
+[31m---------------------------------------[39m
+[31mJob 'raysubmit_UKBkeZRHYew5JptD' failed[39m
+[31m---------------------------------------[39m
+
+Status message: Job entrypoint command failed with exit code 1, last available logs (truncated to 20,000 chars):
+ray.exceptions.RayTaskError(AssertionError): [36mray::main_task()[39m (pid=567710, ip=172.18.0.2)
+  File "/workspace/verl/trainer/main.py", line 123, in main_task
+    trainer.init_workers()
+  File "/workspace/verl/trainer/ray_trainer.py", line 1298, in init_workers
+    wg_dict = self.ray_worker_group_cls(resource_pool=resource_pool, ray_cls_with_init=worker_dict_cls)
+  File "/workspace/verl/single_controller/ray/base.py", line 226, in __init__
+    self._init_with_resource_pool(
+  File "/workspace/verl/single_controller/ray/base.py", line 308, in _init_with_resource_pool
+    assert register_center_actor is not None, (
+AssertionError: failed to get register_center_actor: vKv3Rf_register_center in [{'name': 'datasets_stats_actor', 'namespace': '_dataset_stats_actor'}, {'name': '_ray_internal_job_actor_raysubmit_UKBkeZRHYew5JptD', 'namespace': 'SUPERVISOR_ACTOR_RAY_NAMESPACE'}, {'name': 'vKv3RfWorkerDict_0:0', 'namespace': '6ca0b575-2096-4569-afaf-78a6b7e44948'}]
+

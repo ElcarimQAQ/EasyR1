@@ -48,9 +48,12 @@ class FSDPVLLMShardingManager(BaseShardingManager):
             )
 
         self.world_size = dist.get_world_size()
-        self.tp_size = vllm_ps.get_tensor_model_parallel_world_size()
-        self.tp_rank = vllm_ps.get_tensor_model_parallel_rank()
-        self.tp_group = vllm_ps.get_tensor_model_parallel_group().device_group
+        # self.tp_size = vllm_ps.get_tensor_model_parallel_world_size()
+        # self.tp_rank = vllm_ps.get_tensor_model_parallel_rank()
+        # self.tp_group = vllm_ps.get_tensor_model_parallel_group().device_group
+        self.tp_size = 1  # 强制设置为 1
+        self.tp_rank = 0  # 禁用张量并行，强制 rank 为 0
+        self.tp_group = None  # 禁用张量并行组
 
         # Note that torch_random_states may be different on each dp rank
         self.torch_random_states = torch.cuda.get_rng_state()

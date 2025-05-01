@@ -25,4 +25,9 @@ class WorkerGroupRegisterCenter:
 
 
 def create_worker_group_register_center(name, info):
-    return WorkerGroupRegisterCenter.options(name=name).remote(info)
+    print(f"____________________:{name}_______:{info}")
+    try:
+        return WorkerGroupRegisterCenter.options(name=name).remote(info)
+    except Exception as e:
+        print(f"Failed to create register center {name}: {e}")
+        raise

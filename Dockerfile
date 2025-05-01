@@ -1,6 +1,6 @@
 # Start from the NVIDIA official image (ubuntu-22.04 + python-3.10)
 # https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-24-08.html
-FROM nvcr.io/nvidia/pytorch:24.08-py3
+FROM nvcr.io/nvidia/pytorch:23.10-py3
 
 # Define environments
 ENV MAX_JOBS=32

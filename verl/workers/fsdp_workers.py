@@ -14,10 +14,11 @@
 """
 The main entry point to run the PPO algorithm
 """
+import sys
+sys.path.append('/home/wxy/project3/EasyR1/verl/prismatic')
 
 import os
 from typing import Literal, Optional
-
 import psutil
 import torch
 import torch.distributed as dist
@@ -31,9 +32,12 @@ from transformers import (
     AutoModelForCausalLM,
     AutoModelForTokenClassification,
     AutoModelForVision2Seq,
+    AutoProcessor,
     GenerationConfig,
     PreTrainedModel,
 )
+from transformers import AutoModelForVision2Seq, AutoProcessor, BitsAndBytesConfig
+from transformers import AutoConfig, AutoImageProcessor
 from transformers.modeling_utils import no_init_weights
 
 from ..models.monkey_patch import apply_ulysses_patch
@@ -61,6 +65,10 @@ from .rollout.vllm_rollout import vLLMRollout
 from .sharding_manager import FSDPVLLMShardingManager
 from .sharding_manager.fsdp_ulysses import FSDPUlyssesShardingManager
 
+from prismatic.extern.hf.configuration_prismatic import OpenVLAConfig
+from prismatic.extern.hf.modeling_prismatic import OpenVLAForActionPrediction
+from prismatic.extern.hf.processing_prismatic import PrismaticImageProcessor, PrismaticProcessor
+from prismatic.vla.action_tokenizer import ActionTokenizer
 
 class FSDPWorker(Worker):
     def __init__(
@@ -172,6 +180,162 @@ class FSDPWorker(Worker):
             ):
                 raise ValueError("Cannot use FSDP's CPU offload when gradient accumulation is enabled.")
 
+    # def _build_model_optimizer(
+    #     self,
+    #     model_config: ModelConfig,
+    #     fsdp_config: FSDPConfig,
+    #     optim_config: Optional[OptimConfig],
+    #     padding_free: bool = False,
+    # ) -> None:
+    #     AutoConfig.register("openvla", OpenVLAConfig)
+    #     AutoImageProcessor.register(OpenVLAConfig, PrismaticImageProcessor)
+    #     AutoProcessor.register(OpenVLAConfig, PrismaticProcessor)
+    #     AutoModelForVision2Seq.register(OpenVLAConfig, OpenVLAForActionPrediction)
+
+    #     # 加载处理器和分词器
+    #     self.processor = AutoProcessor.from_pretrained(
+    #         model_config.model_path,
+    #         trust_remote_code=model_config.trust_remote_code,
+    #         use_fast=True,
+    #     )
+    #     self.tokenizer = self.processor.tokenizer
+
+    #     self.model_config = AutoConfig.from_pretrained(
+    #         model_config.model_path,
+    #         trust_remote_code=model_config.trust_remote_code,
+    #         bos_token_id=self.tokenizer.bos_token_id,
+    #         eos_token_id=self.tokenizer.eos_token_id,
+    #         pad_token_id=self.tokenizer.pad_token_id,
+    #         **model_config.override_config,
+    #     )
+
+    #     try:
+    #         self.generation_config = GenerationConfig.from_pretrained(model_config.model_path)
+    #     except Exception:
+    #         self.generation_config = GenerationConfig.from_model_config(self.model_config)
+
+    #     self.print_rank0(f"Model config: {self.model_config}")
+
+    #     if padding_free:
+    #         apply_ulysses_patch(self.model_config.model_type)
+    #         self.print_rank0("Ulysses patch applied!")
+
+    #     if fsdp_config.torch_dtype is None:
+    #         torch_dtype = torch.float32 if self._is_actor or self._is_critic else torch.bfloat16
+    #     else:
+    #         torch_dtype = PrecisionType.to_dtype(fsdp_config.torch_dtype)
+
+    #     if self._is_critic:
+    #         auto_class = AutoModelForTokenClassification
+    #     elif type(self.model_config) in AutoModelForVision2Seq._model_mapping.keys():
+    #         auto_class = AutoModelForVision2Seq
+    #     else:
+    #         auto_class = AutoModelForCausalLM
+
+    #     if (not fsdp_config.enable_rank0_init) or self.device_mesh.get_local_rank("fsdp") == 0:
+    #         model = auto_class.from_pretrained(
+    #             model_config.model_path,
+    #             config=self.model_config,
+    #             torch_dtype=torch_dtype,
+    #             attn_implementation="flash_attention_2",
+    #             device_map="cpu" if fsdp_config.enable_rank0_init else "cuda",
+    #             low_cpu_mem_usage=True,
+    #             trust_remote_code=model_config.trust_remote_code,
+    #         )
+    #     else:
+    #         with no_init_weights(), init_empty_weights():
+    #             model = auto_class.from_config(
+    #                 self.model_config,
+    #                 torch_dtype=torch_dtype,
+    #                 attn_implementation="flash_attention_2",
+    #                 trust_remote_code=model_config.trust_remote_code,
+    #             )
+
+    #     assert isinstance(model, PreTrainedModel)  # lint
+    #     model.tie_weights()  # avoid hanging
+    #     model = model.to(torch_dtype)
+    #     if model_config.enable_gradient_checkpointing:
+    #         model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+
+    #     if not (self._is_actor or self._is_critic):
+    #         model.requires_grad_(False)
+
+    #     if model_config.freeze_vision_tower:
+    #         if hasattr(model, "visual"):
+    #             model.visual.requires_grad_(False)
+    #             fsdp_config.use_orig_params = True
+    #             self.print_rank0("Vision tower is set to not trainable.")
+    #         else:
+    #             self.print_rank0("No vision tower found.")
+
+    #     dist.barrier()
+    #     if self.rank == 0:
+    #         print_model_size(model)
+
+    #     print_gpu_memory_usage("After huggingface model init")
+    #     mixed_precision = MixedPrecision(
+    #         param_dtype=PrecisionType.to_dtype(fsdp_config.mp_param_dtype),
+    #         reduce_dtype=PrecisionType.to_dtype(fsdp_config.mp_reduce_dtype),
+    #         buffer_dtype=PrecisionType.to_dtype(fsdp_config.mp_buffer_dtype),
+    #     )
+    #     auto_wrap_policy = get_fsdp_wrap_policy(model)
+    #     self.print_rank0(f"FSDP wrap policy: {auto_wrap_policy}.")
+
+    #     if self.device_mesh.ndim == 2:
+    #         if fsdp_config.enable_full_shard:
+    #             sharding_strategy = ShardingStrategy.HYBRID_SHARD
+    #         else:
+    #             sharding_strategy = ShardingStrategy._HYBRID_SHARD_ZERO2
+    #     else:
+    #         if fsdp_config.enable_full_shard:
+    #             sharding_strategy = ShardingStrategy.FULL_SHARD
+    #         else:
+    #             sharding_strategy = ShardingStrategy.SHARD_GRAD_OP
+
+    #     if fsdp_config.enable_cpu_offload:
+    #         cpu_offload = CPUOffload(offload_params=True)
+    #     else:
+    #         cpu_offload = None
+
+    #     if fsdp_config.enable_rank0_init:
+    #         sync_module_states = True
+    #         param_init_fn = get_init_fn(model, device="cuda") if self.rank != 0 else None
+    #     else:
+    #         sync_module_states = False
+    #         param_init_fn = None
+
+    #     self.fsdp_module = FSDP(
+    #         model,
+    #         sharding_strategy=sharding_strategy,
+    #         cpu_offload=cpu_offload,
+    #         auto_wrap_policy=auto_wrap_policy,
+    #         mixed_precision=mixed_precision,
+    #         param_init_fn=param_init_fn,
+    #         device_id=torch.cuda.current_device(),
+    #         sync_module_states=sync_module_states,
+    #         forward_prefetch=False,
+    #         use_orig_params=fsdp_config.use_orig_params,
+    #         device_mesh=self.device_mesh,
+    #     )
+    #     print_gpu_memory_usage("After FSDP module init")
+
+    #     if self._is_actor or self._is_critic:
+    #         self.optimizer = torch.optim.AdamW(
+    #             self.fsdp_module.parameters(),
+    #             lr=optim_config.lr,
+    #             betas=optim_config.betas,
+    #             weight_decay=optim_config.weight_decay,
+    #         )
+    #         num_warmup_steps = int(optim_config.lr_warmup_ratio * optim_config.training_steps)
+    #         self.lr_scheduler = get_constant_schedule_with_warmup(
+    #             optimizer=self.optimizer, num_warmup_steps=num_warmup_steps
+    #         )
+    #     else:
+    #         self.optimizer, self.lr_scheduler = None, None
+
+    #     print_gpu_memory_usage("After optimizer init")
+
+    ###
     def _build_model_optimizer(
         self,
         model_config: ModelConfig,
@@ -179,25 +343,30 @@ class FSDPWorker(Worker):
         optim_config: Optional[OptimConfig],
         padding_free: bool = False,
     ) -> None:
-        self.tokenizer = get_tokenizer(
-            model_config.tokenizer_path,
-            trust_remote_code=model_config.trust_remote_code,
-            use_fast=True,
+        # Register OpenVLA classes (reference: finetune.py)
+        AutoConfig.register("openvla", OpenVLAConfig)
+        AutoProcessor.register(OpenVLAConfig, PrismaticProcessor)
+        AutoModelForVision2Seq.register(OpenVLAConfig, OpenVLAForActionPrediction)
+
+        # Load OpenVLA processor and tokenizer (reference: finetune.py)
+        self.processor = AutoProcessor.from_pretrained(
+            model_config.model_path,  # /workspace/models/openvla-7b
+            trust_remote_code=True,
+            local_files_only=True,
         )
-        self.processor = get_processor(
-            model_config.tokenizer_path,
-            trust_remote_code=model_config.trust_remote_code,
-            use_fast=True,
-        )
+        self.tokenizer = self.processor.tokenizer
+
+        # Initialize ActionTokenizer for decoding actions (reference: finetune.py)
+        self.action_tokenizer = ActionTokenizer(self.tokenizer)
+
+        # Load model configuration
         self.model_config = AutoConfig.from_pretrained(
             model_config.model_path,
-            trust_remote_code=model_config.trust_remote_code,
-            bos_token_id=self.tokenizer.bos_token_id,
-            eos_token_id=self.tokenizer.eos_token_id,
-            pad_token_id=self.tokenizer.pad_token_id,
-            **model_config.override_config,
+            trust_remote_code=True,
+            local_files_only=True,
         )
 
+        # Load generation configuration (optional, for inference)
         try:
             self.generation_config = GenerationConfig.from_pretrained(model_config.model_path)
         except Exception:
@@ -205,50 +374,73 @@ class FSDPWorker(Worker):
 
         self.print_rank0(f"Model config: {self.model_config}")
 
-        if padding_free:
-            apply_ulysses_patch(self.model_config.model_type)
-            self.print_rank0("Ulysses patch applied!")
-
+        # Set torch dtype (default to bfloat16 for OpenVLA, reference: finetune.py)
         if fsdp_config.torch_dtype is None:
-            torch_dtype = torch.float32 if self._is_actor or self._is_critic else torch.bfloat16
+            torch_dtype = torch.bfloat16  # OpenVLA default
         else:
             torch_dtype = PrecisionType.to_dtype(fsdp_config.torch_dtype)
 
-        if self._is_critic:
-            auto_class = AutoModelForTokenClassification
-        elif type(self.model_config) in AutoModelForVision2Seq._model_mapping.keys():
-            auto_class = AutoModelForVision2Seq
-        else:
-            auto_class = AutoModelForCausalLM
+        
+        # print("Loading OpenVLA model...")
 
-        if (not fsdp_config.enable_rank0_init) or self.device_mesh.get_local_rank("fsdp") == 0:
-            model = auto_class.from_pretrained(
-                model_config.model_path,
-                config=self.model_config,
-                torch_dtype=torch_dtype,
-                attn_implementation="flash_attention_2",
-                device_map="cpu" if fsdp_config.enable_rank0_init else "cuda",
-                low_cpu_mem_usage=True,
-                trust_remote_code=model_config.trust_remote_code,
-            )
-        else:
-            with no_init_weights(), init_empty_weights():
-                model = auto_class.from_config(
-                    self.model_config,
-                    torch_dtype=torch_dtype,
-                    attn_implementation="flash_attention_2",
-                    trust_remote_code=model_config.trust_remote_code,
+        # # Load OpenVLA model using AutoModelForVision2Seq (reference: finetune.py and train.py)
+        # if (not fsdp_config.enable_rank0_init) or self.device_mesh.get_local_rank("fsdp") == 0:
+        #     model = AutoModelForVision2Seq.from_pretrained(
+        #         model_config.model_path,
+        #         config=self.model_config,
+        #         torch_dtype=torch_dtype,
+        #         device_map="cuda",
+        #         low_cpu_mem_usage=True,
+        #         trust_remote_code=True,
+        #         local_files_only=True,
+        #         # trust_remote_code=model_config.trust_remote_code,
+        #     )
+        # else:
+        #     with no_init_weights(), init_empty_weights():
+        #         model = auto_class.from_config(
+        #             self.model_config,
+        #             torch_dtype=torch_dtype,
+        #             trust_remote_code=model_config.trust_remote_code,
+        #         )
+
+        # assert isinstance(model, PreTrainedModel)
+        # model.tie_weights()
+        # model = model.to(torch_dtype)
+
+        # print("OpenVLA model loaded successfully.")
+        # print("Initializing FSDP...")
+
+        print("Loading OpenVLA model...")
+        import pdb
+        pdb.set_trace() 
+        try:
+            if (not fsdp_config.enable_rank0_init) or self.device_mesh.get_local_rank("fsdp") == 0:
+                model = AutoModelForVision2Seq.from_pretrained(
+                    model_config.model_path,
+                    config=self.model_config,
+                    torch_dtype=torch.bfloat16,
+                    device_map="cuda",
+                    low_cpu_mem_usage=True,
+                    trust_remote_code=True,
+                    local_files_only=True,
                 )
+            else:
+                with no_init_weights(), init_empty_weights():
+                    model = auto_class.from_config(
+                        self.model_config,
+                        torch_dtype=torch.bfloat16,
+                        trust_remote_code=model_config.trust_remote_code,
+                    )
+            print("OpenVLA model loaded successfully.")
+        except Exception as e:
+            print(f"Failed to load model: {e}")
+            raise
 
-        assert isinstance(model, PreTrainedModel)  # lint
-        model.tie_weights()  # avoid hanging
-        model = model.to(torch_dtype)
+        # Enable gradient checkpointing if specified (reference: train.py)
         if model_config.enable_gradient_checkpointing:
             model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
 
-        if not (self._is_actor or self._is_critic):
-            model.requires_grad_(False)
-
+        # Freeze vision tower if specified (reference: train.py)
         if model_config.freeze_vision_tower:
             if hasattr(model, "visual"):
                 model.visual.requires_grad_(False)
@@ -257,35 +449,37 @@ class FSDPWorker(Worker):
             else:
                 self.print_rank0("No vision tower found.")
 
+        # Freeze parameters for non-actor/critic roles (e.g., RefPolicy)
+        if not (self._is_actor or self._is_critic):
+            model.requires_grad_(False)
+
+        # Distributed barrier to ensure all processes are synchronized
         dist.barrier()
         if self.rank == 0:
             print_model_size(model)
 
+        # Log GPU memory usage
         print_gpu_memory_usage("After huggingface model init")
+
+        # Configure mixed precision for FSDP (reference: train.py)
         mixed_precision = MixedPrecision(
-            param_dtype=PrecisionType.to_dtype(fsdp_config.mp_param_dtype),
-            reduce_dtype=PrecisionType.to_dtype(fsdp_config.mp_reduce_dtype),
-            buffer_dtype=PrecisionType.to_dtype(fsdp_config.mp_buffer_dtype),
+            param_dtype=PrecisionType.to_dtype(fsdp_config.mp_param_dtype),  # bf16
+            reduce_dtype=PrecisionType.to_dtype(fsdp_config.mp_reduce_dtype),  # fp32
+            buffer_dtype=PrecisionType.to_dtype(fsdp_config.mp_buffer_dtype),  # fp32
         )
         auto_wrap_policy = get_fsdp_wrap_policy(model)
         self.print_rank0(f"FSDP wrap policy: {auto_wrap_policy}.")
 
+        # Configure FSDP sharding strategy
         if self.device_mesh.ndim == 2:
-            if fsdp_config.enable_full_shard:
-                sharding_strategy = ShardingStrategy.HYBRID_SHARD
-            else:
-                sharding_strategy = ShardingStrategy._HYBRID_SHARD_ZERO2
+            sharding_strategy = ShardingStrategy.HYBRID_SHARD if fsdp_config.enable_full_shard else ShardingStrategy._HYBRID_SHARD_ZERO2
         else:
-            if fsdp_config.enable_full_shard:
-                sharding_strategy = ShardingStrategy.FULL_SHARD
-            else:
-                sharding_strategy = ShardingStrategy.SHARD_GRAD_OP
+            sharding_strategy = ShardingStrategy.FULL_SHARD if fsdp_config.enable_full_shard else ShardingStrategy.SHARD_GRAD_OP
 
-        if fsdp_config.enable_cpu_offload:
-            cpu_offload = CPUOffload(offload_params=True)
-        else:
-            cpu_offload = None
+        # Configure CPU offload if enabled
+        cpu_offload = CPUOffload(offload_params=True) if fsdp_config.enable_cpu_offload else None
 
+        # Configure parameter initialization for FSDP
         if fsdp_config.enable_rank0_init:
             sync_module_states = True
             param_init_fn = get_init_fn(model, device="cuda") if self.rank != 0 else None
@@ -293,6 +487,7 @@ class FSDPWorker(Worker):
             sync_module_states = False
             param_init_fn = None
 
+        # Wrap model with FSDP (reference: train.py)
         self.fsdp_module = FSDP(
             model,
             sharding_strategy=sharding_strategy,
@@ -308,12 +503,13 @@ class FSDPWorker(Worker):
         )
         print_gpu_memory_usage("After FSDP module init")
 
+        # Initialize optimizer for actor/critic roles (reference: finetune.py and train.py)
         if self._is_actor or self._is_critic:
             self.optimizer = torch.optim.AdamW(
                 self.fsdp_module.parameters(),
-                lr=optim_config.lr,
+                lr=optim_config.lr,  # 1.0e-5
                 betas=optim_config.betas,
-                weight_decay=optim_config.weight_decay,
+                weight_decay=optim_config.weight_decay,  # 0.1
             )
             num_warmup_steps = int(optim_config.lr_warmup_ratio * optim_config.training_steps)
             self.lr_scheduler = get_constant_schedule_with_warmup(
@@ -323,6 +519,7 @@ class FSDPWorker(Worker):
             self.optimizer, self.lr_scheduler = None, None
 
         print_gpu_memory_usage("After optimizer init")
+    ###
 
     def _build_rollout(self) -> None:
         # TODO(sgm): support FSDP hybrid shard for larger model
@@ -337,11 +534,11 @@ class FSDPWorker(Worker):
             config=self.config.rollout,
             tokenizer=self.tokenizer,
         )
-        self.rollout_sharding_manager = FSDPVLLMShardingManager(
-            module=self.fsdp_module,
-            inference_engine=self.rollout.inference_engine,
-            device_mesh=rollout_device_mesh,
-        )
+        # self.rollout_sharding_manager = FSDPVLLMShardingManager(
+        #     module=self.fsdp_module,
+        #     inference_engine=self.rollout.inference_engine,
+        #     device_mesh=rollout_device_mesh,
+        # )
         print_gpu_memory_usage("After vllm init")
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL)
@@ -439,8 +636,12 @@ class FSDPWorker(Worker):
 
     """ActorRolloutRefWorker"""
 
+    # fsdp_workers.py
     @register(dispatch_mode=Dispatch.DP_COMPUTE_PROTO)
     def update_actor(self, data: DataProto):
+        if not isinstance(data, DataProto):
+            raise TypeError(f"Expected data to be DataProto, got {type(data)}")
+
         assert self._is_actor
         data = data.to("cuda")
 
@@ -469,7 +670,6 @@ class FSDPWorker(Worker):
             lr = self.lr_scheduler.get_last_lr()[0]
             metrics["actor/lr"] = lr
 
-            # TODO: here, we should return all metrics
             output = DataProto(meta_info={"metrics": metrics})
             output = self.ulysses_sharding_manager.postprocess_data(data=output)
 
@@ -482,34 +682,44 @@ class FSDPWorker(Worker):
         output = output.to("cpu")
         return output
 
+    # @register(dispatch_mode=Dispatch.DP_COMPUTE_PROTO)
+    # def generate_sequences(self, prompts: DataProto):
+    #     assert self._is_rollout
+
+    #     if self._use_param_offload:
+    #         load_fsdp_model(self.fsdp_module)
+
+    #     meta_info = {
+    #         "eos_token_id": self.generation_config.eos_token_id
+    #         if self.generation_config is not None
+    #         else self.tokenizer.eos_token_id,
+    #         "pad_token_id": self.generation_config.pad_token_id
+    #         if self.generation_config is not None
+    #         else self.tokenizer.pad_token_id,
+    #     }
+    #     prompts.meta_info.update(meta_info)
+    #     with self.rollout_sharding_manager:
+    #         # after parameters sync with rollout, offload actor model to CPU
+    #         if self._use_param_offload:
+    #             offload_fsdp_model(self.fsdp_module)
+
+    #         if self._use_optimizer_offload:
+    #             offload_fsdp_optimizer(optimizer=self.optimizer)
+
+    #         prompts = self.rollout_sharding_manager.preprocess_data(prompts)
+    #         output = self.rollout.generate_sequences(prompts=prompts)
+    #         output = self.rollout_sharding_manager.postprocess_data(output)
+
+    #     output = output.to("cpu")
+    #     return output
     @register(dispatch_mode=Dispatch.DP_COMPUTE_PROTO)
     def generate_sequences(self, prompts: DataProto):
         assert self._is_rollout
-
         if self._use_param_offload:
             load_fsdp_model(self.fsdp_module)
-
-        meta_info = {
-            "eos_token_id": self.generation_config.eos_token_id
-            if self.generation_config is not None
-            else self.tokenizer.eos_token_id,
-            "pad_token_id": self.generation_config.pad_token_id
-            if self.generation_config is not None
-            else self.tokenizer.pad_token_id,
-        }
-        prompts.meta_info.update(meta_info)
-        with self.rollout_sharding_manager:
-            # after parameters sync with rollout, offload actor model to CPU
-            if self._use_param_offload:
-                offload_fsdp_model(self.fsdp_module)
-
-            if self._use_optimizer_offload:
-                offload_fsdp_optimizer(optimizer=self.optimizer)
-
-            prompts = self.rollout_sharding_manager.preprocess_data(prompts)
-            output = self.rollout.generate_sequences(prompts=prompts)
-            output = self.rollout_sharding_manager.postprocess_data(output)
-
+        if self._use_optimizer_offload:
+            offload_fsdp_optimizer(optimizer=self.optimizer)
+        output = self.rollout.generate_sequences(prompts=prompts)
         output = output.to("cpu")
         return output
 

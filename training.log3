@@ -1,0 +1,322 @@
++ export PYTHONPATH=/workspace/verl
++ PYTHONPATH=/workspace/verl
++ export NCCL_DEBUG=WARN
++ NCCL_DEBUG=WARN
++ export MASTER_ADDR=172.18.0.2
++ MASTER_ADDR=172.18.0.2
++ export MASTER_PORT=63799
++ MASTER_PORT=63799
++ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
++ PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
++ export TOKENIZERS_PARALLELISM=false
++ TOKENIZERS_PARALLELISM=false
++ export WANDB_API_KEY=e2e0261992fab6ce73072eaac4424f5a7e29a8f1
++ WANDB_API_KEY=e2e0261992fab6ce73072eaac4424f5a7e29a8f1
++ MODEL_PATH=/workspace/models/openvla-7b
++ export CUDA_VISIBLE_DEVICES=1,2
++ CUDA_VISIBLE_DEVICES=1,2
++ SYSTEM_PROMPT='Act as a robot to perform the given task.'
++ python3 -m verl.trainer.main config=examples/grpo_example_vla.yaml 'data.system_prompt=Act as a robot to perform the given task.' worker.actor.model.model_path=/workspace/models/openvla-7b worker.rollout.enable_chunked_prefill=false trainer.experiment_name=openvla_7b_robot trainer.n_gpus_per_node=2
+2025-05-01 16:12:17.883929: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-05-01 16:12:17.915750: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-05-01 16:12:17.915783: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2025-05-01 16:12:17.916823: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-05-01 16:12:17.921879: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-05-01 16:12:24.350143: W tensorflow/core/common_runtime/gpu/gpu_device.cc:2348] TensorFlow was not built with CUDA kernel binaries compatible with compute capability 9.0. CUDA kernels will be jit-compiled from PTX, which could take 30 minutes or longer.
+2025-05-01 16:12:24.353472: W tensorflow/core/common_runtime/gpu/gpu_device.cc:2348] TensorFlow was not built with CUDA kernel binaries compatible with compute capability 9.0. CUDA kernels will be jit-compiled from PTX, which could take 30 minutes or longer.
+2025-05-01 16:12:38,731	INFO worker.py:1636 -- Connecting to existing Ray cluster at address: 172.18.0.2:6379...
+2025-05-01 16:12:38,746	INFO worker.py:1821 -- Connected to Ray cluster.
+[36m(pid=46257)[0m 2025-05-01 16:12:56.332947: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[36m(pid=46257)[0m 2025-05-01 16:12:56.387351: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+[36m(pid=46257)[0m 2025-05-01 16:12:56.387394: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+[36m(pid=46257)[0m 2025-05-01 16:12:56.388942: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+[36m(pid=46257)[0m 2025-05-01 16:12:56.397610: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+[36m(pid=46257)[0m To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+[36m(pid=46257)[0m 2025-05-01 16:13:03.920103: W tensorflow/core/common_runtime/gpu/gpu_device.cc:2348] TensorFlow was not built with CUDA kernel binaries compatible with compute capability 9.0. CUDA kernels will be jit-compiled from PTX, which could take 30 minutes or longer.
+[36m(main_task pid=46257)[0m Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.48, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using LIBERO constants:
+  NUM_ACTIONS_CHUNK = 5
+  ACTION_DIM = 7
+  PROPRIO_DIM = 7
+  ACTION_PROPRIO_NORMALIZATION_TYPE = bounds_q99
+If needed, manually set the correct constants in `prismatic/vla/constants.py`!
+Environment variables: environ({'NPP_VERSION': '12.2.1.4', 'SHELL': '/bin/bash', 'NVIDIA_VISIBLE_DEVICES': 'all', 'COLORTERM': 'truecolor', 'DALI_BUILD': '9783408', 'CUSOLVER_VERSION': '11.5.2.141', 'NVM_INC': '/usr/local/nvm/versions/node/v16.20.2/include/node', 'TERM_PROGRAM_VERSION': '1.99.3', 'CUBLAS_VERSION': '12.2.5.6', 'HOSTNAME': '1c74aacb176b', 'NODE_OPTIONS': '', 'MASTER_PORT': '63799', 'CUFFT_VERSION': '11.0.8.103', 'NVIDIA_REQUIRE_CUDA': 'cuda>=9.0', 'CUDA_CACHE_DISABLE': '1', 'TENSORBOARD_PORT': '6006', 'REMOTE_CONTAINERS_IPC': '/tmp/vscode-remote-containers-ipc-ce84809c-2da7-4082-b87f-b0aea56c9532.sock', 'TORCH_CUDA_ARCH_LIST': '5.2 6.0 6.1 7.0 7.2 7.5 8.0 8.6 8.7 9.0+PTX', 'NCCL_VERSION': '2.19.3', 'OPENBLAS_VERSION': '0.3.23', 'CUSPARSE_VERSION': '12.1.2.141', 'ENV': '/etc/shinit_v2', 'PWD': '/workspace', 'OPENUCX_VERSION': '1.15.0', 'NSIGHT_SYSTEMS_VERSION': '2023.3.1.92', 'NVIDIA_DRIVER_CAPABILITIES': 'graphics,utility,compute', 'POLYGRAPHY_VERSION': '0.49.0', 'NCCL_DEBUG': 'WARN', 'UCC_CL_BASIC_TLS': '^sharp', 'VLLM_WORKER_MULTIPROC_METHOD': 'spawn', 'TRT_VERSION': '8.6.1.6+cuda12.0.1.011', 'VSCODE_GIT_ASKPASS_NODE': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/node', 'NVIDIA_PRODUCT_NAME': 'PyTorch', 'RDMACORE_VERSION': '39.0', 'TOKENIZERS_PARALLELISM': 'false', 'HOME': '/root', 'LANG': 'en_US.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'REMOTE_CONTAINERS': 'true', 'COCOAPI_VERSION': '2.0+nv0.7.3', 'CUDA_VERSION': '12.2.2.009', 'PYTORCH_VERSION': '2.1.0a0+32f93b1', 'CURAND_VERSION': '10.3.3.141', 'GIT_ASKPASS': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/extensions/git/dist/askpass.sh', 'PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION': 'python', 'PYTORCH_BUILD_NUMBER': '0', 'USE_EXPERIMENTAL_CUDNN_V8_API': '1', 'CUTENSOR_VERSION': '1.7.0.1', 'PIP_DEFAULT_TIMEOUT': '100', 'PYTORCH_CUDA_ALLOC_CONF': 'expandable_segments:True', 'HPCX_VERSION': '2.16rc4', 'TORCH_CUDNN_V8_API_ENABLED': '1', 'NVM_DIR': '/usr/local/nvm', 'MASTER_ADDR': '172.18.0.2', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'CUDA_VISIBLE_DEVICES': '1,2', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'PYTHONPATH': '/workspace/verl', 'SETUPTOOLS_USE_DISTUTILS': 'stdlib', 'TERM': 'xterm-256color', 'GDRCOPY_VERSION': '2.3', 'REMOTE_CONTAINERS_SOCKETS': '["/root/.gnupg/S.gpg-agent"]', 'LESSOPEN': '| /usr/bin/lesspipe %s', 'OPENMPI_VERSION': '4.1.5rc2', 'NVJPEG_VERSION': '12.2.2.4', 'LIBRARY_PATH': '/usr/local/cuda/lib64/stubs:', 'WANDB_API_KEY': 'e2e0261992fab6ce73072eaac4424f5a7e29a8f1', 'VSCODE_GIT_IPC_HANDLE': '/tmp/vscode-git-9f406a4b86.sock', 'PYTHONIOENCODING': 'utf-8', 'SHLVL': '4', 'MAX_JOBS': '32', 'NVM_CD_FLAGS': '', 'BASH_ENV': '/etc/bash.bashrc', 'CUDNN_VERSION': '8.9.5.29', 'NSIGHT_COMPUTE_VERSION': '2023.2.2.3', 'DALI_VERSION': '1.30.0', 'JUPYTER_PORT': '8888', 'PYTORCH_HOME': '/opt/pytorch/pytorch', 'LD_LIBRARY_PATH': '/usr/local/lib/python3.10/dist-packages/cv2/../../lib64:/usr/local/lib/python3.10/dist-packages/torch/lib:/usr/local/lib/python3.10/dist-packages/torch_tensorrt/lib:/usr/local/cuda/compat/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64', 'NVIDIA_BUILD_ID': '71422337', 'OMPI_MCA_coll_hcoll_enable': '0', 'OPAL_PREFIX': '/opt/hpcx/ompi', 'CUDA_DRIVER_VERSION': '535.104.05', 'LC_ALL': 'C.UTF-8', 'TRANSFORMER_ENGINE_VERSION': '0.12', 'PYTORCH_BUILD_VERSION': '2.1.0a0+32f93b1', '_CUDA_COMPAT_PATH': '/usr/local/cuda/compat', 'VSCODE_GIT_ASKPASS_MAIN': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/extensions/git/dist/askpass-main.js', 'CUDA_HOME': '/usr/local/cuda', 'CUDA_MODULE_LOADING': 'LAZY', 'NVIDIA_REQUIRE_JETPACK_HOST_MOUNTS': '', 'BROWSER': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/bin/helpers/browser.sh', 'PATH': '/root/.vscode-server/bin/17baf841131aa23349f217ca7c570c76ee87b957/bin/remote-cli:/usr/local/nvm/versions/node/v16.20.2/bin:/usr/local/lib/python3.10/dist-packages/torch_tensorrt/bin:/usr/local/mpi/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/ucx/bin:/opt/tensorrt/bin', 'MOFED_VERSION': '5.4-rdmacore39.0', 'NVM_BIN': '/usr/local/nvm/versions/node/v16.20.2/bin', 'NVIDIA_PYTORCH_VERSION': '23.10', 'TRTOSS_VERSION': '23.10', 'DEBIAN_FRONTEND': 'noninteractive', 'TORCH_ALLOW_TF32_CUBLAS_OVERRIDE': '1', 'TERM_PROGRAM': 'vscode', 'VSCODE_IPC_HOOK_CLI': '/tmp/vscode-ipc-523ffe21-dc8d-4f97-a38b-bfa02661411d.sock', '_': '/usr/bin/python3', 'RAY_CLIENT_MODE': '0', 'LAZY_LEGACY_OP': 'False', 'TF2_BEHAVIOR': '1', 'TPU_ML_PLATFORM': 'Tensorflow', 'KMP_DUPLICATE_LIB_OK': 'True', 'KMP_INIT_AT_FORK': 'FALSE', 'NCCL_CUMEM_ENABLE': '0', 'TORCHINDUCTOR_COMPILE_THREADS': '1'})
+Starting Ray initialization...
+Ray initialized successfully.
+Starting main_task...
+Ray cluster resources: {'memory': 870207802368.0, 'node:172.18.0.2': 1.0, 'object_store_memory': 200000000000.0, 'CPU': 224.0, 'node:__internal_head__': 1.0, 'GPU': 8.0, 'accelerator_type:H20': 1.0}
+Ray available resources: {'CPU': 224.0, 'accelerator_type:H20': 1.0, 'node:172.18.0.2': 1.0, 'memory': 870207802368.0, 'GPU': 8.0, 'node:__internal_head__': 1.0, 'object_store_memory': 200000000000.0}
+[36m(pid=46257)[0m Using LIBERO constants:
+[36m(pid=46257)[0m   NUM_ACTIONS_CHUNK = 5
+[36m(pid=46257)[0m   ACTION_DIM = 7
+[36m(pid=46257)[0m   PROPRIO_DIM = 7
+[36m(pid=46257)[0m   ACTION_PROPRIO_NORMALIZATION_TYPE = bounds_q99
+[36m(pid=46257)[0m If needed, manually set the correct constants in `prismatic/vla/constants.py`!
+[36m(main_task pid=46257)[0m {
+[36m(main_task pid=46257)[0m   "data": {
+[36m(main_task pid=46257)[0m     "train_files": "",
+[36m(main_task pid=46257)[0m     "val_files": "",
+[36m(main_task pid=46257)[0m     "data_root_dir": "/workspace",
+[36m(main_task pid=46257)[0m     "data_mix": "bridge_orig",
+[36m(main_task pid=46257)[0m     "prompt_key": "steps/language_instruction",
+[36m(main_task pid=46257)[0m     "answer_key": "steps/action",
+[36m(main_task pid=46257)[0m     "image_key": "steps/observation/image_0",
+[36m(main_task pid=46257)[0m     "max_prompt_length": 128,
+[36m(main_task pid=46257)[0m     "max_response_length": 7,
+[36m(main_task pid=46257)[0m     "rollout_batch_size": 2,
+[36m(main_task pid=46257)[0m     "system_prompt": "Act as a robot to perform the given task.",
+[36m(main_task pid=46257)[0m     "shuffle": true,
+[36m(main_task pid=46257)[0m     "seed": 1,
+[36m(main_task pid=46257)[0m     "max_pixels": 150528,
+[36m(main_task pid=46257)[0m     "min_pixels": 150528
+[36m(main_task pid=46257)[0m   },
+[36m(main_task pid=46257)[0m   "worker": {
+[36m(main_task pid=46257)[0m     "hybrid_engine": true,
+[36m(main_task pid=46257)[0m     "actor": {
+[36m(main_task pid=46257)[0m       "strategy": "fsdp",
+[36m(main_task pid=46257)[0m       "global_batch_size": 2,
+[36m(main_task pid=46257)[0m       "micro_batch_size_per_device_for_update": 1,
+[36m(main_task pid=46257)[0m       "micro_batch_size_per_device_for_experience": 1,
+[36m(main_task pid=46257)[0m       "max_grad_norm": 1.0,
+[36m(main_task pid=46257)[0m       "clip_ratio": 0.2,
+[36m(main_task pid=46257)[0m       "entropy_coeff": 0.001,
+[36m(main_task pid=46257)[0m       "use_kl_loss": true,
+[36m(main_task pid=46257)[0m       "kl_loss_coef": 0.001,
+[36m(main_task pid=46257)[0m       "kl_loss_type": "low_var_kl",
+[36m(main_task pid=46257)[0m       "ppo_epochs": 1,
+[36m(main_task pid=46257)[0m       "padding_free": false,
+[36m(main_task pid=46257)[0m       "ulysses_sequence_parallel_size": 1,
+[36m(main_task pid=46257)[0m       "model": {
+[36m(main_task pid=46257)[0m         "model_path": "/workspace/models/openvla-7b",
+[36m(main_task pid=46257)[0m         "tokenizer_path": "/workspace/models/openvla-7b",
+[36m(main_task pid=46257)[0m         "override_config": {},
+[36m(main_task pid=46257)[0m         "enable_gradient_checkpointing": true,
+[36m(main_task pid=46257)[0m         "trust_remote_code": true,
+[36m(main_task pid=46257)[0m         "freeze_vision_tower": false
+[36m(main_task pid=46257)[0m       },
+[36m(main_task pid=46257)[0m       "optim": {
+[36m(main_task pid=46257)[0m         "lr": 1e-05,
+[36m(main_task pid=46257)[0m         "betas": [
+[36m(main_task pid=46257)[0m           0.9,
+[36m(main_task pid=46257)[0m           0.999
+[36m(main_task pid=46257)[0m         ],
+[36m(main_task pid=46257)[0m         "weight_decay": 0.1,
+[36m(main_task pid=46257)[0m         "lr_warmup_ratio": 0.0,
+[36m(main_task pid=46257)[0m         "min_lr_ratio": null,
+[36m(main_task pid=46257)[0m         "warmup_style": "constant",
+[36m(main_task pid=46257)[0m         "training_steps": -1
+[36m(main_task pid=46257)[0m       },
+[36m(main_task pid=46257)[0m       "fsdp": {
+[36m(main_task pid=46257)[0m         "enable_full_shard": true,
+[36m(main_task pid=46257)[0m         "enable_cpu_offload": false,
+[36m(main_task pid=46257)[0m         "enable_rank0_init": true,
+[36m(main_task pid=46257)[0m         "use_orig_params": false,
+[36m(main_task pid=46257)[0m         "torch_dtype": null,
+[36m(main_task pid=46257)[0m         "fsdp_size": -1,
+[36m(main_task pid=46257)[0m         "mp_param_dtype": "bf16",
+[36m(main_task pid=46257)[0m         "mp_reduce_dtype": "fp32",
+[36m(main_task pid=46257)[0m         "mp_buffer_dtype": "fp32"
+[36m(main_task pid=46257)[0m       },
+[36m(main_task pid=46257)[0m       "offload": {
+[36m(main_task pid=46257)[0m         "offload_params": false,
+[36m(main_task pid=46257)[0m         "offload_optimizer": false
+[36m(main_task pid=46257)[0m       },
+[36m(main_task pid=46257)[0m       "global_batch_size_per_device": -1
+[36m(main_task pid=46257)[0m     },
+[36m(main_task pid=46257)[0m     "critic": {
+[36m(main_task pid=46257)[0m       "strategy": "fsdp",
+[36m(main_task pid=46257)[0m       "global_batch_size": 256,
+[36m(main_task pid=46257)[0m       "micro_batch_size_per_device_for_update": 4,
+[36m(main_task pid=46257)[0m       "micro_batch_size_per_device_for_experience": 16,
+[36m(main_task pid=46257)[0m       "max_grad_norm": 1.0,
+[36m(main_task pid=46257)[0m       "cliprange_value": 0.5,
+[36m(main_task pid=46257)[0m       "ppo_epochs": 1,
+[36m(main_task pid=46257)[0m       "padding_free": false,
+[36m(main_task pid=46257)[0m       "ulysses_sequence_parallel_size": 1,
+[36m(main_task pid=46257)[0m       "model": {
+[36m(main_task pid=46257)[0m         "model_path": null,
+[36m(main_task pid=46257)[0m         "tokenizer_path": null,
+[36m(main_task pid=46257)[0m         "override_config": {},
+[36m(main_task pid=46257)[0m         "enable_gradient_checkpointing": true,
+[36m(main_task pid=46257)[0m         "trust_remote_code": true,
+[36m(main_task pid=46257)[0m         "freeze_vision_tower": false
+[36m(main_task pid=46257)[0m       },
+[36m(main_task pid=46257)[0m       "optim": {
+[36m(main_task pid=46257)[0m         "lr": 1e-06,
+[36m(main_task pid=46257)[0m         "betas": [
+[36m(main_task pid=46257)[0m           0.9,
+[36m(main_task pid=46257)[0m           0.999
+[36m(main_task pid=46257)[0m         ],
+[36m(main_task pid=46257)[0m         "weight_decay": 0.01,
+[36m(main_task pid=46257)[0m         "lr_warmup_ratio": 0.0,
+[36m(main_task pid=46257)[0m         "min_lr_ratio": null,
+[36m(main_task pid=46257)[0m         "warmup_style": "constant",
+[36m(main_task pid=46257)[0m         "training_steps": -1
+[36m(main_task pid=46257)[0m       },
+[36m(main_task pid=46257)[0m       "fsdp": {
+[36m(main_task pid=46257)[0m         "enable_full_shard": true,
+[36m(main_task pid=46257)[0m         "enable_cpu_offload": false,
+[36m(main_task pid=46257)[0m         "enable_rank0_init": false,
+[36m(main_task pid=46257)[0m         "use_orig_params": false,
+[36m(main_task pid=46257)[0m         "torch_dtype": null,
+[36m(main_task pid=46257)[0m         "fsdp_size": -1,
+[36m(main_task pid=46257)[0m         "mp_param_dtype": "bf16",
+[36m(main_task pid=46257)[0m         "mp_reduce_dtype": "fp32",
+[36m(main_task pid=46257)[0m         "mp_buffer_dtype": "fp32"
+[36m(main_task pid=46257)[0m       },
+[36m(main_task pid=46257)[0m       "offload": {
+[36m(main_task pid=46257)[0m         "offload_params": false,
+[36m(main_task pid=46257)[0m         "offload_optimizer": false
+[36m(main_task pid=46257)[0m       },
+[36m(main_task pid=46257)[0m       "global_batch_size_per_device": -1
+[36m(main_task pid=46257)[0m     },
+[36m(main_task pid=46257)[0m     "ref": {
+[36m(main_task pid=46257)[0m       "strategy": "fsdp",
+[36m(main_task pid=46257)[0m       "fsdp": {
+[36m(main_task pid=46257)[0m         "enable_full_shard": true,
+[36m(main_task pid=46257)[0m         "enable_cpu_offload": true,
+[36m(main_task pid=46257)[0m         "enable_rank0_init": true,
+[36m(main_task pid=46257)[0m         "use_orig_params": false,
+[36m(main_task pid=46257)[0m         "torch_dtype": null,
+[36m(main_task pid=46257)[0m         "fsdp_size": -1,
+[36m(main_task pid=46257)[0m         "mp_param_dtype": "bf16",
+[36m(main_task pid=46257)[0m         "mp_reduce_dtype": "fp32",
+[36m(main_task pid=46257)[0m         "mp_buffer_dtype": "fp32"
+[36m(main_task pid=46257)[0m       },
+[36m(main_task pid=46257)[0m       "offload": {
+[36m(main_task pid=46257)[0m         "offload_params": false,
+[36m(main_task pid=46257)[0m         "offload_optimizer": false
+[36m(main_task pid=46257)[0m       },
+[36m(main_task pid=46257)[0m       "micro_batch_size_per_device_for_experience": 1,
+[36m(main_task pid=46257)[0m       "padding_free": false,
+[36m(main_task pid=46257)[0m       "ulysses_sequence_parallel_size": 1
+[36m(main_task pid=46257)[0m     },
+[36m(main_task pid=46257)[0m     "reward": {
+[36m(main_task pid=46257)[0m       "reward_type": "function",
+[36m(main_task pid=46257)[0m       "compute_score": "action"
+[36m(main_task pid=46257)[0m     },
+[36m(main_task pid=46257)[0m     "rollout": {
+[36m(main_task pid=46257)[0m       "name": "vllm",
+[36m(main_task pid=46257)[0m       "temperature": 0.6,
+[36m(main_task pid=46257)[0m       "top_k": -1,
+[36m(main_task pid=46257)[0m       "top_p": 1.0,
+[36m(main_task pid=46257)[0m       "dtype": "bf16",
+[36m(main_task pid=46257)[0m       "gpu_memory_utilization": 0.5,
+[36m(main_task pid=46257)[0m       "ignore_eos": false,
+[36m(main_task pid=46257)[0m       "enforce_eager": false,
+[36m(main_task pid=46257)[0m       "free_cache_engine": false,
+[36m(main_task pid=46257)[0m       "enable_chunked_prefill": false,
+[36m(main_task pid=46257)[0m       "tensor_parallel_size": 1,
+[36m(main_task pid=46257)[0m `use_fast` is set to `True` but the image processor class does not have a fast version.  Falling back to the slow version.
+[36m(main_task pid=46257)[0m 2025-05-01 16:13:21.851354: I tensorflow/core/grappler/optimizers/data/replicate_on_split.cc:32] Running replicate on split optimization
+[36m(main_task pid=46257)[0m 2025-05-01 16:13:22.731667: I tensorflow/core/grappler/optimizers/data/replicate_on_split.cc:32] Running replicate on split optimization
+[36m(main_task pid=46257)[0m 2025-05-01 16:13:23.526147: I tensorflow/core/grappler/optimizers/data/replicate_on_split.cc:32] Running replicate on split optimization
+[36m(main_task pid=46257)[0m DeprecationWarning: `ray.state.available_resources_per_node` is a private attribute and access will be removed in a future Ray version.
+[36m(main_task pid=46257)[0m DeprecationWarning: `ray.state.actors` is a private attribute and access will be removed in a future Ray version.
+[36m(pid=47977)[0m 2025-05-01 16:13:37.372994: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[36m(pid=47977)[0m 2025-05-01 16:13:37.428410: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+[36m(pid=47977)[0m 2025-05-01 16:13:37.428454: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+[36m(pid=47977)[0m 2025-05-01 16:13:37.429901: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+[36m(pid=47977)[0m 2025-05-01 16:13:37.438444: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+[36m(pid=47977)[0m To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/verl/trainer/main.py", line 160, in <module>
+    main()    
+  File "/workspace/verl/trainer/main.py", line 155, in main
+    ray.get(main_task.remote(ppo_config))
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/auto_init_hook.py", line 21, in auto_init_wrapper
+    return fn(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/client_mode_hook.py", line 103, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/worker.py", line 2755, in get
+    values, debugger_breakpoint = worker.get_objects(object_refs, timeout=timeout)
+  File "/usr/local/lib/python3.10/dist-packages/ray/_private/worker.py", line 906, in get_objects
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(AssertionError): [36mray::main_task()[39m (pid=46257, ip=172.18.0.2)
+  File "/workspace/verl/trainer/main.py", line 123, in main_task
+    trainer.init_workers()
+  File "/workspace/verl/trainer/ray_trainer.py", line 1300, in init_workers
+    wg_dict = self.ray_worker_group_cls(resource_pool=resource_pool, ray_cls_with_init=worker_dict_cls)
+  File "/workspace/verl/single_controller/ray/base.py", line 226, in __init__
+    self._init_with_resource_pool(
+  File "/workspace/verl/single_controller/ray/base.py", line 308, in _init_with_resource_pool
+    assert register_center_actor is not None, (
+AssertionError: failed to get register_center_actor: w0m2IQ_register_center in [{'name': 'w0m2IQWorkerDict_0:0', 'namespace': '96e5007a-c20d-48cc-b25c-90c0b9d9a24f'}]
+[36m(main_task pid=46257)[0m       "max_num_batched_tokens": 8192,
+[36m(main_task pid=46257)[0m       "max_num_seqs": 1024,
+[36m(main_task pid=46257)[0m       "disable_log_stats": true,
+[36m(main_task pid=46257)[0m       "do_sample": true,
+[36m(main_task pid=46257)[0m       "n": 1,
+[36m(main_task pid=46257)[0m       "limit_images": 1,
+[36m(main_task pid=46257)[0m       "prompt_length": 128,
+[36m(main_task pid=46257)[0m       "response_length": 7
+[36m(main_task pid=46257)[0m     }
+[36m(main_task pid=46257)[0m   },
+[36m(main_task pid=46257)[0m   "algorithm": {
+[36m(main_task pid=46257)[0m     "gamma": 1.0,
+[36m(main_task pid=46257)[0m     "lam": 1.0,
+[36m(main_task pid=46257)[0m     "adv_estimator": "grpo",
+[36m(main_task pid=46257)[0m     "kl_penalty": "kl",
+[36m(main_task pid=46257)[0m     "kl_type": "fixed",
+[36m(main_task pid=46257)[0m     "kl_coef": 0.0,
+[36m(main_task pid=46257)[0m     "kl_horizon": 0.0,
+[36m(main_task pid=46257)[0m     "kl_target": 0.0
+[36m(main_task pid=46257)[0m   },
+[36m(main_task pid=46257)[0m   "trainer": {
+[36m(main_task pid=46257)[0m     "total_episodes": 15,
+[36m(main_task pid=46257)[0m     "max_steps": null,
+[36m(main_task pid=46257)[0m     "project_name": "easy_r1",
+[36m(main_task pid=46257)[0m     "experiment_name": "openvla_7b_robot",
+[36m(main_task pid=46257)[0m     "logger": [
+[36m(main_task pid=46257)[0m       "console"
+[36m(main_task pid=46257)[0m     ],
+[36m(main_task pid=46257)[0m     "nnodes": 1,
+[36m(main_task pid=46257)[0m     "n_gpus_per_node": 2,
+[36m(main_task pid=46257)[0m     "critic_warmup": 0,
+[36m(main_task pid=46257)[0m     "val_freq": 0,
+[36m(main_task pid=46257)[0m     "val_before_train": false,
+[36m(main_task pid=46257)[0m     "val_only": false,
+[36m(main_task pid=46257)[0m     "val_generations_to_log": 1,
+[36m(main_task pid=46257)[0m     "save_freq": 5,
+[36m(main_task pid=46257)[0m     "remove_previous_ckpt": false,
+[36m(main_task pid=46257)[0m     "remove_ckpt_after_load": false,
+[36m(main_task pid=46257)[0m     "save_checkpoint_path": "checkpoints/easy_r1/openvla_7b_robot",
+[36m(main_task pid=46257)[0m     "load_checkpoint_path": null
+[36m(main_task pid=46257)[0m   }
+[36m(main_task pid=46257)[0m }
+[36m(main_task pid=46257)[0m 05/01 [16:13:21] INFO     | >> Load dataset info from /workspace/bridge_orig/1.0.0                                               dataset_info.py:707
+[36m(main_task pid=46257)[0m                  INFO     | >> Creating a tf.data.Dataset reading 1152 files located in folders: /workspace/bridge_orig/1.0.0.         reader.py:262
+[36m(main_task pid=46257)[0m                  INFO     | >> Constructing tf.data.Dataset bridge_dataset for split all, from /workspace/bridge_orig/1.0.0     logging_logger.py:49
+[36m(main_task pid=46257)[0m 05/01 [16:13:22] INFO     | >> [*] Loading existing dataset statistics from                                                        data_utils.py:199
+[36m(main_task pid=46257)[0m                           /workspace/bridge_orig/1.0.0/dataset_statistics_8195b16c5704f4d93daacfa18a63ebffdfbd858e3c0467a912e8d1b7                  
+[36m(main_task pid=46257)[0m                           c1e50360.json.                                                                                                            
+[36m(main_task pid=46257)[0m                  INFO     | >> Creating a tf.data.Dataset reading 1024 files located in folders: /workspace/bridge_orig/1.0.0.         reader.py:262
+[36m(main_task pid=46257)[0m                  INFO     | >> Constructing tf.data.Dataset bridge_dataset for split train, from /workspace/bridge_orig/1.0.0   logging_logger.py:49
+[36m(main_task pid=46257)[0m 
+[36m(main_task pid=46257)[0m ######################################################################################
+[36m(main_task pid=46257)[0m # Loading the following 1 datasets (incl. sampling weight):                         #
+[36m(main_task pid=46257)[0m # bridge_orig: =============================================================1.000000 #
+[36m(main_task pid=46257)[0m ######################################################################################
+[36m(main_task pid=46257)[0m 
+[36m(main_task pid=46257)[0m 05/01 [16:13:23] INFO     | >> [*] Threads per Dataset: [1]                                                                           dataset.py:528
+[36m(main_task pid=46257)[0m                  INFO     | >> [*] Reads per Dataset: [1]                                                                             dataset.py:529
+[36m(main_task pid=46257)[0m                  INFO     | >> [*] Constructing datasets...                                                                           dataset.py:532
+[36m(main_task pid=46257)[0m                  INFO     | >> Load dataset info from /workspace/bridge_orig/1.0.0                                               dataset_info.py:707
+[36m(main_task pid=46257)[0m                  INFO     | >> Creating a tf.data.Dataset reading 1024 files located in folders: /workspace/bridge_orig/1.0.0.         reader.py:262
+[36m(main_task pid=46257)[0m                  INFO     | >> Constructing tf.data.Dataset bridge_dataset for split train, from /workspace/bridge_orig/1.0.0   logging_logger.py:49
+[36m(main_task pid=46257)[0m 05/01 [16:13:24] INFO     | >> [*] Applying frame transforms on dataset...                                                            dataset.py:572
+[36m(main_task pid=46257)[0m Size of train dataloader: 1067731
+[36m(main_task pid=46257)[0m Total training steps: 16015965
+[36m(main_task pid=46257)[0m in RayProcessDispatchConfiguration: name_prefix = global_pool
+[36m(main_task pid=46257)[0m pg_name_prefix = global_poolverl_group_2:
+[36m(main_task pid=46257)[0m -----------rank id:0
+[36m(main_task pid=46257)[0m name_prefix:w0m2IQ
+[36m(main_task pid=46257)[0m Expected actor name: w0m2IQ_register_center
+[36m(main_task pid=46257)[0m Listing all actors:
+[36m(main_task pid=46257)[0m Actor ID: b26c6c8a8ff60df8a4bac9d601000000, Name: None, Namespace: None, State: None
+[36m(main_task pid=46257)[0m name_prefix: w0m2IQ

@@ -142,6 +142,59 @@ class PureOverwatch:
     def world_size() -> int:
         return 1
 
+class RayOverwatch(DistributedOverwatch):
+    def __init__(self, name: str) -> None:
+        # 禁用 accelerate 的 PartialState 初始化
+        self.logger = ContextAdapter(logging.getLogger(name), extra={})
+        
+        # Logger Delegation (for convenience; would be nice to just compose & dynamic dispatch eventually)
+        self.debug = self.logger.debug
+        self.info = self.logger.info
+        self.warning = self.logger.warning
+        self.error = self.logger.error
+        self.critical = self.logger.critical
+        
+        # 动态导入 Ray 避免硬依赖
+        from ray import get_runtime_context
+        self.rt_ctx = get_runtime_context()
+        
+        # 获取 Ray 任务上下文信息
+        self._world_size = self.rt_ctx.get_assigned_resources().get("num_workers", 1)
+        self._rank = int(os.environ.get("RANK", "0"))
+    
+        # 设置日志级别
+        self.logger.setLevel(logging.INFO if self._rank == 0 else logging.ERROR)    
+    
+    def rank(self) -> int:
+        return self._rank
+    
+    def world_size(self) -> int:
+        return self._world_size
+    
+    def is_rank_zero(self) -> bool:
+        return self._rank == 0
+    
+    @property
+    def rank_zero_only(self) -> Callable[..., Any]:
+        """仅允许 Rank 0 执行的装饰器"""
+        def decorator(func: Callable) -> Callable:
+            def wrapper(*args, **kwargs):
+                if self._rank == 0:
+                    return func(*args, **kwargs)
+                else:
+                    return None  # 或其他默认行为
+            return wrapper
+        return decorator
 
-def initialize_overwatch(name: str) -> Union[DistributedOverwatch, PureOverwatch]:
-    return DistributedOverwatch(name) if int(os.environ.get("WORLD_SIZE", -1)) != -1 else PureOverwatch(name)
+def initialize_overwatch(name: str) -> Union[DistributedOverwatch, PureOverwatch, "RayOverwatch"]:
+    try:
+        import ray
+        if ray.is_initialized():
+            return RayOverwatch(name)
+    except ImportError:
+        pass  
+    
+    if int(os.environ.get("WORLD_SIZE", -1)) != -1:
+        return DistributedOverwatch(name)
+    else:
+        return PureOverwatch(name)
