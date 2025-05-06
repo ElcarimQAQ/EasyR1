@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: OpenVLA Training",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "verl.trainer.main",
+            "args": [
+                "config=examples/grpo_example_vla.yaml",
+                "data.system_prompt=\"You FIRST think about the reasoning process as an internal monologue and then provide the final answer. The reasoning process MUST BE enclosed within <think>  tags. The final answer MUST BE put in \\boxed{}.\"",
+                "worker.actor.model.model_path=/data/models/openvla-7b",
+                "worker.rollout.enable_chunked_prefill=false",
+                "trainer.experiment_name=openvla_7b_robot",
+                "trainer.n_gpus_per_node=2"
+            ],
+            "env": {
+                "PYTHONPATH": "/workspace/verl:${env:PYTHONPATH}",
+                "VLLM_ATTENTION_BACKEND": "XFORMERS",
+                "VLLM_USE_V1": "0",
+                "NCCL_DEBUG": "WARN",
+                "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+                "TOKENIZERS_PARALLELISM": "true",
+                "WANDB_API_KEY": "e2e0261992fab6ce73072eaac4424f5a7e29a8f1",
+                "CUDA_VISIBLE_DEVICES": "1,2,3,4",
+                "MASTER_ADDR": "172.18.0.2",
+                "MASTER_PORT": "63799",
+            },
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        }
+    ]
+}

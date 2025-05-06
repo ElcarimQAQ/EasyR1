@@ -344,15 +344,13 @@ class FSDPWorker(Worker):
         padding_free: bool = False,
     ) -> None:
         # Register OpenVLA classes (reference: finetune.py)
-        AutoConfig.register("openvla", OpenVLAConfig)
-        AutoProcessor.register(OpenVLAConfig, PrismaticProcessor)
-        AutoModelForVision2Seq.register(OpenVLAConfig, OpenVLAForActionPrediction)
-
-        # Load OpenVLA processor and tokenizer (reference: finetune.py)
-        self.processor = AutoProcessor.from_pretrained(
-            model_config.model_path,  # /workspace/models/openvla-7b
-            trust_remote_code=True,
-            local_files_only=True,
+        self.tokenizer = get_tokenizer(
+            model_config.tokenizer_path,
+            trust_remote_code=model_config.trust_remote_code,
+        )
+        self.processor = get_processor(
+            model_config.tokenizer_path,
+            trust_remote_code=model_config.trust_remote_code,
         )
         self.tokenizer = self.processor.tokenizer
 
@@ -411,8 +409,7 @@ class FSDPWorker(Worker):
         # print("Initializing FSDP...")
 
         print("Loading OpenVLA model...")
-        import pdb
-        pdb.set_trace() 
+    
         try:
             if (not fsdp_config.enable_rank0_init) or self.device_mesh.get_local_rank("fsdp") == 0:
                 model = AutoModelForVision2Seq.from_pretrained(
@@ -426,7 +423,7 @@ class FSDPWorker(Worker):
                 )
             else:
                 with no_init_weights(), init_empty_weights():
-                    model = auto_class.from_config(
+                    model = AutoModelForVision2Seq.from_config(
                         self.model_config,
                         torch_dtype=torch.bfloat16,
                         trust_remote_code=model_config.trust_remote_code,

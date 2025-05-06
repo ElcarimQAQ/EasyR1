@@ -11,11 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Note that we don't combine the main with ray_trainer as ray_trainer is used by other main.
-"""
-
-import os
 
 import json
 
@@ -30,115 +25,120 @@ from .config import PPOConfig
 from .ray_trainer import RayPPOTrainer, ResourcePoolManager, Role
 
 
-@ray.remote(num_cpus=1, num_gpus=1)
-def main_task(config: PPOConfig):
-    # please make sure main_task is not scheduled on head
-    # print config
-    config.deep_post_init()
-    print(json.dumps(config.to_dict(), indent=2))
+# please make sure main_task is not scheduled on head
+@ray.remote(num_cpus=1)
+class Runner:
+    """A runner for RL training."""
 
-
-###
-    # 加载 OpenVLA 的 processor 和 tokenizer
-    from transformers import AutoProcessor
-    # processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
-    processor = AutoProcessor.from_pretrained(
-        # ppo_config.worker.actor.model.model_path,  # /workspace/models/openvla-7b
-        config.worker.actor.model.model_path,
-        trust_remote_code=True,
-        local_files_only=True,  # 强制本地加载
-    )
-    tokenizer = processor.tokenizer
-
-    # 实例化 tokenizer 和 processor
-    # 已经通过 processor 获取，无需额外加载
-    # 如果需要单独加载 tokenizer，可以使用：
-    # from transformers import AutoTokenizer
-    # tokenizer = AutoTokenizer.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
+    def run(self, config: PPOConfig):
+        # print config
+        print(json.dumps(config.to_dict(), indent=2))###
+        # 加载 OpenVLA 的 processor 和 tokenizer
+        from transformers import AutoProcessor
+        # processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
+        processor = AutoProcessor.from_pretrained(
+            # ppo_config.worker.actor.model.model_path,  # /workspace/models/openvla-7b
+            config.worker.actor.model.model_path,
+            trust_remote_code=True,
+            local_files_only=True,  # 强制本地加载
+        )
+        tokenizer = processor.tokenizer    
+        # 实例化 tokenizer 和 processor        
+         # 已经通过 processor 获取，无需额外加载
+        # 如果需要单独加载 tokenizer，可以使用：
+        # from transformers import AutoTokenizer
+        # tokenizer = AutoTokenizer.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
 ###
 
-    # instantiate tokenizer
-    tokenizer = get_tokenizer(
-        config.worker.actor.model.model_path,
-        trust_remote_code=config.worker.actor.model.trust_remote_code,
-        use_fast=True,
-    )
-    processor = get_processor(
-        config.worker.actor.model.model_path,
-        trust_remote_code=config.worker.actor.model.trust_remote_code,
-        use_fast=True,
-    )
+        # instantiate tokenizer
+        tokenizer = get_tokenizer(
+            config.worker.actor.model.model_path,
+            trust_remote_code=config.worker.actor.model.trust_remote_code,
+            use_fast=True,
+        )
+        processor = get_processor(
+            config.worker.actor.model.model_path,
+            trust_remote_code=config.worker.actor.model.trust_remote_code,
+            use_fast=False,
+        )
 
-    # define worker classes
-    ray_worker_group_cls = RayWorkerGroup
-    role_worker_mapping = {
-        Role.ActorRollout: ray.remote(FSDPWorker),
-        Role.Critic: ray.remote(FSDPWorker),
-        Role.RefPolicy: ray.remote(FSDPWorker),
-    }
-    global_pool_id = "global_pool"
-    resource_pool_spec = {
-        global_pool_id: [config.trainer.n_gpus_per_node] * config.trainer.nnodes,
-    }
-    mapping = {
-        Role.ActorRollout: global_pool_id,
-        Role.Critic: global_pool_id,
-        Role.RefPolicy: global_pool_id,
-    }
-    resource_pool_manager = ResourcePoolManager(resource_pool_spec=resource_pool_spec, mapping=mapping)
+        # define worker classes
+        ray_worker_group_cls = RayWorkerGroup
+        role_worker_mapping = {
+            Role.ActorRollout: ray.remote(FSDPWorker),
+            Role.Critic: ray.remote(FSDPWorker),
+            Role.RefPolicy: ray.remote(FSDPWorker),
+        }
+        global_pool_id = "global_pool"
+        resource_pool_spec = {
+            global_pool_id: [config.trainer.n_gpus_per_node] * config.trainer.nnodes,
+        }
+        mapping = {
+            Role.ActorRollout: global_pool_id,
+            Role.Critic: global_pool_id,
+            Role.RefPolicy: global_pool_id,
+        }
+        resource_pool_manager = ResourcePoolManager(resource_pool_spec=resource_pool_spec, mapping=mapping)
 
-    reward_fn = CustomRewardManager(
-        tokenizer=tokenizer, num_examine=1, compute_score=config.worker.reward.compute_score
-    )
-    val_reward_fn = CustomRewardManager(
-        tokenizer=tokenizer, num_examine=1, compute_score=config.worker.reward.compute_score
-    )
+        reward_fn = CustomRewardManager(
+            tokenizer=tokenizer, num_examine=1, compute_score=config.worker.reward.compute_score
+        )
+        val_reward_fn = CustomRewardManager(
+            tokenizer=tokenizer, num_examine=1, compute_score=config.worker.reward.compute_score
+        )
 
-    trainer = RayPPOTrainer(
-        config=config,
-        tokenizer=tokenizer,
-        processor=processor,
-        role_worker_mapping=role_worker_mapping,
-        resource_pool_manager=resource_pool_manager,
-        ray_worker_group_cls=ray_worker_group_cls,
-        reward_fn=reward_fn,
-        val_reward_fn=val_reward_fn,
-    )
-    trainer.init_workers()
-    trainer.fit()
+
+        trainer = RayPPOTrainer(
+            config=config,
+            tokenizer=tokenizer,
+            processor=processor,
+            # train_dataloader=train_dataloader,
+            # val_dataloader=val_dataloader,
+            role_worker_mapping=role_worker_mapping,
+            resource_pool_manager=resource_pool_manager,
+            ray_worker_group_cls=ray_worker_group_cls,
+            reward_fn=reward_fn,
+            val_reward_fn=val_reward_fn,
+        )
+        trainer.init_workers()
+        trainer.fit()
 
 
 def main():
     cli_args = OmegaConf.from_cli()
-    file_config = OmegaConf.load(getattr(cli_args, "config"))
-    cli_args.pop("config", None)
-
     default_config = OmegaConf.structured(PPOConfig())
-    ppo_config = OmegaConf.merge(default_config, file_config, cli_args)
-    ppo_config = OmegaConf.to_object(ppo_config)
-    print("Environment variables:", os.environ)
-    print("Starting Ray initialization...")
+
+    if hasattr(cli_args, "config"):
+        config_path = cli_args.pop("config", None)
+        file_config = OmegaConf.load(config_path)
+        default_config = OmegaConf.merge(default_config, file_config)
+
+    ppo_config = OmegaConf.merge(default_config, cli_args)
+    ppo_config: PPOConfig = OmegaConf.to_object(ppo_config)
+    ppo_config.deep_post_init()
+
     if not ray.is_initialized():
-        # ray.init(runtime_env={"env_vars": {"TOKENIZERS_PARALLELISM": "true", "NCCL_DEBUG": "WARN"}})
-         # 在 Ray 初始化时设置默认环境变量
-        ray.init(
-            runtime_env={
-                "env_vars": {
-                    "TOKENIZERS_PARALLELISM": "true",
-                    "NCCL_DEBUG": "WARN",
-                    "MASTER_ADDR": os.environ.get("MASTER_ADDR", "172.18.0.2"),
-                    "MASTER_PORT": os.environ.get("MASTER_PORT", "63799"),
-                    "WG_BACKEND": 'ray',
-                }
+        runtime_env = {
+            "env_vars": {
+                "TOKENIZERS_PARALLELISM": "true",
+                "NCCL_DEBUG": "WARN",
+                "VLLM_LOGGING_LEVEL": "WARN",
+                "TORCH_NCCL_AVOID_RECORD_STREAMS": "1",
+                "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:False",
+                "PYTHONUNBUFFERED": "1",
             }
-        )
-    print("Ray initialized successfully.")
-    print("Starting main_task...")
-    print("Ray cluster resources:", ray.cluster_resources())
-    print("Ray available resources:", ray.available_resources())
-    ray.get(main_task.remote(ppo_config))
+        }
+        # ray.init(runtime_env=runtime_env)
+        ray.init(runtime_env=runtime_env, local_mode=True)
+        print("Ray initialized successfully.")
+        print("Starting main_task...")
+        print("Ray cluster resources:", ray.cluster_resources())
+        print("Ray available resources:", ray.available_resources())
+
+    runner = Runner.remote()
+    ray.get(runner.run.remote(ppo_config))
     print("main_task completed.")
 
 
 if __name__ == "__main__":
-    main()    
+    main()
